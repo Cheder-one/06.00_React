@@ -10,7 +10,7 @@ class Task extends Component {
         <div className="view">
           <input className="toggle" type="checkbox" />
           <label>
-            <span className="description">{p.description}</span>
+            <span className="description">{p.value}</span>
             <span className="created">{p.created}</span>
           </label>
           <button className="icon icon-edit"></button>
@@ -22,8 +22,8 @@ class Task extends Component {
 }
 
 Task.propTypes = {
-  description: PropTypes.string.isRequired,
-  created: PropTypes.string.isRequired
+  value: PropTypes.string.isRequired,
+  created: PropTypes.number.isRequired
 };
 
 Task.defaultProps = {

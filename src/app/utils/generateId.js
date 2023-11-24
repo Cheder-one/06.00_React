@@ -1,0 +1,7 @@
+import { customAlphabet } from "nanoid";
+
+export const generateId = () => {
+  const nanoid = customAlphabet("1234567890abcdef", 10);
+  const id = nanoid();
+  return id;
+};

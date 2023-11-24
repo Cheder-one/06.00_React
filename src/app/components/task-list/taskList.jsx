@@ -1,16 +1,25 @@
 import { Component } from "react";
-// import PropTypes from "prop-types";
+import PropTypes from "prop-types";
 
 import "./taskList.scss";
+import Task from "../task/task";
 
 class TaskList extends Component {
   render() {
-    return null;
+    const p = this.props;
+
+    return (
+      <ul className="todo-list">
+        {p.todos.map(({ id, value }) => {
+          return <Task key={id} value={value} created={0} />;
+        })}
+      </ul>
+    );
   }
 }
 
-// TaskList.propTypes = {
-//   title: PropTypes.string.isRequired
-// };
+TaskList.propTypes = {
+  todos: PropTypes.array.isRequired
+};
 
 export default TaskList;

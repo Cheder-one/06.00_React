@@ -17,8 +17,8 @@ class taskInput extends Component {
           className="new-todo"
           placeholder="What needs to be done?"
           autoFocus
-          onChange={this.handleInputChange}
-          onKeyDown={this.handleKeyPress}
+          onChange={this.props.onChange}
+          onKeyDown={this.props.onSubmit}
         />
       </header>
     );
