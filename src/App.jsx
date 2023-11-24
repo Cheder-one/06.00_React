@@ -1,12 +1,29 @@
 import { Component } from "react";
 
-import TaskInputForm from "./app/components/task-input/taskInputForm";
+import TaskInput from "./app/components/task-input/taskInput";
+import TaskList from "./app/components/task-list/taskList";
 
 class App extends Component {
+  state = {
+    todoInput: ""
+  };
+
+  handleSubmit = (value) => {
+    console.log(value);
+  };
+
   render() {
+    const s = this.state;
+
     return (
       <>
-        <TaskInputForm />
+        <TaskInput
+          title="Todos"
+          name="todoInput"
+          value={s.todoInput}
+          onSubmit={this.handleSubmit}
+        />
+        <TaskList description={s.inputValue} />
       </>
     );
   }
