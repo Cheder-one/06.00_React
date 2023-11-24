@@ -1,5 +1,5 @@
 {
-  "name": "my-app",
+  "name": "todo-app",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -39,8 +39,14 @@
   },
   "devDependencies": {
     "eslint": "^8.54.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-config-standard": "^17.1.0",
+    "eslint-plugin-import": "^2.29.0",
+    "eslint-plugin-n": "^16.3.1",
     "eslint-plugin-prettier": "^5.0.1",
+    "eslint-plugin-promise": "^6.1.1",
     "eslint-plugin-react": "^7.33.2",
+    "eslint-plugin-react-refresh": "^0.4.4",
     "prettier": "^3.1.0"
   }
 }

@@ -5,11 +5,11 @@ class TaskInputForm extends Component {
 
   render() {
     return (
-      <footer class="footer">
-        <span class="todo-count">1 items left</span>
-        <ul class="filters">
+      <footer className="footer">
+        <span className="todo-count">1 items left</span>
+        <ul className="filters">
           <li>
-            <button class="selected">All</button>
+            <button className="selected">All</button>
           </li>
           <li>
             <button>Active</button>
@@ -18,7 +18,7 @@ class TaskInputForm extends Component {
             <button>Completed</button>
           </li>
         </ul>
-        <button class="clear-completed">Clear completed</button>
+        <button className="clear-completed">Clear completed</button>
       </footer>
     );
   }
