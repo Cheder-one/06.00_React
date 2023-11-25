@@ -38,7 +38,10 @@ module.exports = {
         "newlines-between": "always"
       }
     ],
-    indent: ["error", 2],
+    indent: "off",
+    "no-unused-vars": "warn",
+    "no-case-declarations": "off",
+    "react/prop-types": "warn",
     "space-before-function-paren": [
       "error",
       { anonymous: "always", named: "never" }

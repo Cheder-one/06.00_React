@@ -2,11 +2,25 @@ import { Component } from "react";
 import PropTypes from "prop-types";
 
 class Task extends Component {
+  handleCheckboxClick = ({ target, currentTarget }) => {
+    const id = currentTarget.id;
+    const li = document.getElementById(id);
+
+    switch (target.tagName) {
+      case "INPUT":
+        li.classList.toggle("completed");
+        break;
+      case "SPAN":
+        const checkbox = li.querySelector(".toggle");
+        checkbox.click();
+    }
+  };
+
   render() {
     const p = this.props;
 
     return (
-      <li>
+      <li id={p.id} onClick={this.handleCheckboxClick}>
         <div className="view">
           <input className="toggle" type="checkbox" />
           <label>
@@ -22,6 +36,7 @@ class Task extends Component {
 }
 
 Task.propTypes = {
+  id: PropTypes.string.isRequired,
   value: PropTypes.string.isRequired,
   created: PropTypes.number.isRequired
 };

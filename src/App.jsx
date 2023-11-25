@@ -12,17 +12,22 @@ class App extends Component {
 
   handleInputChange = ({ target }) => {
     this.setState({
-      todoInput: target.value.trim()
+      todoInput: target.value
     });
   };
 
   handleSubmit = ({ key }) => {
+    const { todoInput } = this.state;
+    if (!todoInput) return;
+
     if (key === "Enter") {
+      const newTodo = {
+        id: generateId(),
+        value: todoInput.trim()
+      };
+
       this.setState((prev) => ({
-        todos: [
-          ...prev.todos,
-          { id: generateId(), value: this.state.todoInput }
-        ]
+        todos: [...prev.todos, newTodo]
       }));
       this.setState({ todoInput: "" });
     }
@@ -34,7 +39,6 @@ class App extends Component {
     return (
       <>
         <TaskInput
-          title="Todos"
           name="todoInput"
           value={this.state.todoInput}
           onChange={this.handleInputChange}

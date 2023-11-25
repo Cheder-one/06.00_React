@@ -10,9 +10,9 @@ class TaskList extends Component {
 
     return (
       <ul className="todo-list">
-        {p.todos.map(({ id, value }) => {
-          return <Task key={id} value={value} created={0} />;
-        })}
+        {p.todos.map(({ id, value }) => (
+          <Task key={id} id={id} value={value} created={0} />
+        ))}
       </ul>
     );
   }
