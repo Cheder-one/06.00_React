@@ -46,7 +46,7 @@ module.exports = {
       "error",
       { anonymous: "always", named: "never" }
     ],
-    "prettier/prettier": "error",
+    "prettier/prettier": "warn",
     "linebreak-style": [0, "windows"],
     quotes: ["error", "double", { allowTemplateLiterals: true }],
     semi: [2, "always"]

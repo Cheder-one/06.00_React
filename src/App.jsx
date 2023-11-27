@@ -1,50 +1,49 @@
 import { Component } from "react";
 
-import TaskInput from "./app/components/task-input/taskInput";
+// import TaskInput from "./app/components/task-input/taskInput";
 import TaskList from "./app/components/task-list/taskList";
+import Footer from "./app/components/footer/footer";
+import Header from "./app/components/UI/header/header";
 import { generateId } from "./app/utils";
 
 class App extends Component {
   state = {
-    todos: [],
-    todoInput: ""
-  };
-
-  handleInputChange = ({ target }) => {
-    this.setState({
-      todoInput: target.value
-    });
-  };
-
-  handleSubmit = ({ key }) => {
-    const { todoInput } = this.state;
-    if (!todoInput) return;
-
-    if (key === "Enter") {
-      const newTodo = {
+    todoInput: "",
+    todos: [
+      {
         id: generateId(),
-        value: todoInput.trim()
-      };
+        value: "Новая задача",
+        completed: false
+      }
+    ]
+  };
 
-      this.setState((prev) => ({
-        todos: [...prev.todos, newTodo]
-      }));
-      this.setState({ todoInput: "" });
-    }
+  handleInputChange = (obj) => {
+    this.setState(obj);
+  };
+
+  handleTodoSubmit = (newTodo) => {
+    this.setState((prev) => ({
+      todos: [...prev.todos, newTodo]
+    }));
   };
 
   render() {
-    const s = this.state;
+    const state = this.state;
 
     return (
       <>
-        <TaskInput
-          name="todoInput"
-          value={this.state.todoInput}
-          onChange={this.handleInputChange}
-          onSubmit={this.handleSubmit}
+        <Header
+          title="Todos"
+          inputValue={state.todoInput}
+          onInputChange={this.handleInputChange}
+          onTodoSubmit={this.handleTodoSubmit}
         />
-        <TaskList todos={s.todos} />
+        <TaskList
+          todos={state.todos}
+          onTodoSubmit={this.handleTodoSubmit}
+        />
+        <Footer />
       </>
     );
   }
