@@ -5,6 +5,40 @@ import "./taskList.scss";
 import Task from "../task/task";
 
 class TaskList extends Component {
+  handleTodoToggle = (itemId) => {
+    const toggleTodo = (prev) => {
+      const toggled = prev.todos.map((todo) =>
+        todo.id === itemId
+          ? { ...todo, completed: !todo.completed }
+          : todo
+      );
+      return { ...prev, todos: toggled };
+    };
+
+    this.props.onTodoToggle(toggleTodo);
+  };
+
+  handleTodoEditSubmit = ({ newTodo }) => {
+    const editTodo = (prev) => {
+      const edited = prev.todos.map((todo) =>
+        todo.id === newTodo.id
+          ? { ...todo, value: newTodo.value }
+          : todo
+      );
+      return { ...prev, todos: edited };
+    };
+
+    this.props.onTodoEditSubmit(editTodo);
+  };
+
+  handleTodoDelete = (itemId) => {
+    const filterTodos = (prev) => {
+      const filtered = prev.todos.filter(({ id }) => id !== itemId);
+      return { ...prev, todos: filtered };
+    };
+    this.props.onTodoDelete(filterTodos);
+  };
+
   render() {
     const props = this.props;
 
@@ -17,9 +51,9 @@ class TaskList extends Component {
             value={value}
             created={0}
             onTodoSubmit={props.onTodoSubmit}
-            onTodoToggle={props.onTodoToggle}
-            onTodoEditSubmit={props.onTodoEditSubmit}
-            onTodoDelete={props.onTodoDelete}
+            onTodoToggle={this.handleTodoToggle}
+            onTodoEditSubmit={this.handleTodoEditSubmit}
+            onTodoDelete={this.handleTodoDelete}
           />
         ))}
       </ul>

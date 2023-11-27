@@ -4,6 +4,11 @@ import PropTypes from "prop-types";
 import TaskInput from "../../task-input/taskInput";
 
 class Header extends Component {
+  handleInputChange = ({ name, value }) => {
+    const inputValue = (prev) => ({ ...prev, [name]: value });
+    this.props.onInputChange(inputValue);
+  };
+
   render() {
     const props = this.props;
 
@@ -15,7 +20,7 @@ class Header extends Component {
           name="todoInput"
           value={props.inputValue}
           autoFocus
-          onInputChange={props.onInputChange}
+          onInputChange={this.handleInputChange}
           onTodoSubmit={props.onTodoSubmit}
         />
       </header>

@@ -1,9 +1,8 @@
 import { Component } from "react";
 
-// import TaskInput from "./app/components/task-input/taskInput";
 import TaskList from "./app/components/task-list/taskList";
-import Footer from "./app/components/footer/footer";
-import Header from "./app/components/UI/header/header";
+import Footer from "./app/components/common/footer/footer";
+import Header from "./app/components/common/header/header";
 import { generateId } from "./app/utils";
 
 class App extends Component {
@@ -18,8 +17,8 @@ class App extends Component {
     ]
   };
 
-  handleInputChange = ({ name, value }) => {
-    this.setState((prev) => ({ ...prev, [name]: value }));
+  handleInputChange = (callback) => {
+    this.setState(callback);
   };
 
   handleTodoSubmit = ({ newTodo }) => {
@@ -29,39 +28,38 @@ class App extends Component {
     }));
   };
 
-  handleTodoToggle = (itemId) => {
-    const toggleTodo = (prev) => {
-      const toggled = prev.todos.map((todo) =>
-        todo.id === itemId
-          ? { ...todo, completed: !todo.completed }
-          : todo
-      );
-      return { ...prev, todos: toggled };
-    };
+  handleTodoToggle = (callback) => {
+    // const toggleTodo = (prev) => {
+    //   const toggled = prev.todos.map((todo) =>
+    //     todo.id === itemId
+    //       ? { ...todo, completed: !todo.completed }
+    //       : todo
+    //   );
+    //   return { ...prev, todos: toggled };
+    // };
 
-    this.setState(toggleTodo);
+    this.setState(callback);
   };
 
-  handleTodoEditSubmit = ({ newTodo }) => {
-    console.log(newTodo);
-    const editTodo = (prev) => {
-      const edited = prev.todos.map((todo) =>
-        todo.id === newTodo.id
-          ? { ...todo, value: newTodo.value }
-          : todo
-      );
-      return { ...prev, todos: edited };
-    };
+  handleTodoEditSubmit = (callback) => {
+    // const editTodo = (prev) => {
+    //   const edited = prev.todos.map((todo) =>
+    //     todo.id === newTodo.id
+    //       ? { ...todo, value: newTodo.value }
+    //       : todo
+    //   );
+    //   return { ...prev, todos: edited };
+    // };
 
-    this.setState(editTodo);
+    this.setState(callback);
   };
 
-  handleTodoDelete = (itemId) => {
-    const filterTodos = (prev) => {
-      const filtered = prev.todos.filter(({ id }) => id !== itemId);
-      return { ...prev, todos: filtered };
-    };
-    this.setState(filterTodos);
+  handleTodoDelete = (callback) => {
+    // const filterTodos = (prev) => {
+    //   const filtered = prev.todos.filter(({ id }) => id !== itemId);
+    //   return { ...prev, todos: filtered };
+    // };
+    this.setState(callback);
   };
 
   render() {
@@ -82,7 +80,7 @@ class App extends Component {
           onTodoEditSubmit={this.handleTodoEditSubmit}
           onTodoDelete={this.handleTodoDelete}
         />
-        <Footer />
+        <Footer todoCount={state.todos.length} />
       </>
     );
   }
