@@ -5,17 +5,22 @@ import TaskInput from "../task-input/taskInput";
 
 class Task extends Component {
   state = {
-    isEdit: false
+    isEdit: false,
+    editableTodoId: "",
+    newTodoValue: ""
   };
 
-  handleClick = (e) => {
-    const { checkIsClassExist } = Utils;
+  handleTodoClick = (e) => {
+    const { hasClassInTarget } = Utils;
+    const isEdit = hasClassInTarget(e, "icon-edit");
+    const isDelete = hasClassInTarget(e, "icon-destroy");
+    const editableTodoId = e.currentTarget.id;
 
-    if (checkIsClassExist(e, "icon-edit")) {
+    if (isEdit) {
       this.toggleTodoEdit(e);
-    }
-    if (checkIsClassExist(e, "icon-destroy")) {
-      // this.props.onTaskDel(e);
+      this.setState((prev) => ({ ...prev, editableTodoId }));
+    } else if (isDelete) {
+      this.handleTodoDelete(e);
     } else {
       this.handleCheckboxClick(e);
     }
@@ -23,44 +28,46 @@ class Task extends Component {
 
   handleCheckboxClick = ({ target, currentTarget }) => {
     const id = currentTarget.id;
-    const li = document.getElementById(id);
 
-    switch (target.className) {
-      case "toggle":
-        li.classList.toggle("completed");
-        break;
-      case "description":
-        const checkbox = li.querySelector(".toggle");
-        checkbox.click();
-    }
+    this.props.onTodoToggle(id);
+    Utils.markTodo(target, id);
   };
 
-  handleInputChange = (obj) => {
-    const props = this.props;
-    props.onInputChange(obj);
-  };
-
-  handleTodoChange = (params) => {
-    console.log(params);
-    const props = this.props;
-    props.onInputChange(params);
-  };
-
-  toggleTodoEdit = ({ target, currentTarget }) => {
+  toggleTodoEdit = () => {
     this.setState((prev) => ({
+      ...prev,
       isEdit: !prev.isEdit
     }));
   };
 
+  handleTodoEdit = ({ name, value }) => {
+    this.setState((prev) => ({ ...prev, [name]: value }));
+  };
+
+  handleTodoSubmit = () => {
+    const { editableTodoId, newTodoValue } = this.state;
+    this.props.onTodoEditSubmit({
+      newTodo: {
+        id: editableTodoId,
+        value: newTodoValue
+      }
+    });
+    this.toggleTodoEdit();
+  };
+
+  handleTodoDelete = ({ currentTarget }) => {
+    this.props.onTodoDelete(currentTarget.id);
+  };
+
   render() {
     const props = this.props;
-    const { isEdit } = this.state;
+    const { isEdit, newTodoValue } = this.state;
 
     return (
       <li
         id={props.id}
         className={isEdit ? "editing" : ""}
-        onClick={this.handleClick}
+        onClick={this.handleTodoClick}
       >
         <div className="view">
           <input className="toggle" type="checkbox" />
@@ -73,12 +80,13 @@ class Task extends Component {
         </div>
         {isEdit && (
           <TaskInput
-            name="todoInputEdit"
-            value={props.valueEdit}
+            name="newTodoValue"
+            value={newTodoValue}
+            autoFocus
             className="edit"
             placeholder=""
-            onInputChange={this.handleInputChange}
-            onTodoSubmit={this.handleTodoChange}
+            onInputChange={this.handleTodoEdit}
+            onTodoSubmit={this.handleTodoSubmit}
           />
         )}
       </li>
@@ -87,9 +95,22 @@ class Task extends Component {
 }
 
 class Utils extends Task {
-  static checkIsClassExist(event, className) {
+  static hasClassInTarget(event, className) {
     return event.target.classList.contains(className);
   }
+
+  static markTodo = (target, id) => {
+    const li = document.getElementById(id);
+
+    switch (target.className) {
+      case "toggle":
+        li.classList.toggle("completed");
+        break;
+      case "description":
+        const checkbox = li.querySelector(".toggle");
+        checkbox.click();
+    }
+  };
 }
 
 Task.propTypes = {
@@ -97,8 +118,7 @@ Task.propTypes = {
   value: PropTypes.string.isRequired,
   valueEdit: PropTypes.string,
   created: PropTypes.number.isRequired,
-  isEdit: PropTypes.bool,
-  onInputChange: PropTypes.func.isRequired
+  isEdit: PropTypes.bool
 };
 
 export default Task;

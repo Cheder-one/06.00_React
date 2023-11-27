@@ -7,7 +7,7 @@ import { generateId } from "../../utils";
 class TaskInput extends Component {
   handleInputChange = ({ target }) => {
     const { onInputChange, name } = this.props;
-    onInputChange({ [name]: target.value });
+    onInputChange({ name, value: target.value });
   };
 
   handleSubmit = ({ key }) => {
@@ -22,8 +22,8 @@ class TaskInput extends Component {
         completed: false
       };
 
-      props.onInputChange({ [name]: "" });
-      props.onTodoSubmit(newTodo);
+      props.onInputChange({ name, value: "" });
+      props.onTodoSubmit({ newTodo });
     }
   };
 

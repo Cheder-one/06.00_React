@@ -5,17 +5,8 @@ import "./taskList.scss";
 import Task from "../task/task";
 
 class TaskList extends Component {
-  state = {
-    todoInputEdit: ""
-  };
-
-  handleInputEdit = (obj) => {
-    this.setState(obj);
-  };
-
   render() {
     const props = this.props;
-    const { todoInputEdit } = this.state;
 
     return (
       <ul className="todo-list">
@@ -25,9 +16,10 @@ class TaskList extends Component {
             key={id}
             value={value}
             created={0}
-            valueEdit={todoInputEdit}
-            onInputChange={this.handleInputEdit}
-            onTodoSubmit={this.props.onTodoSubmit}
+            onTodoSubmit={props.onTodoSubmit}
+            onTodoToggle={props.onTodoToggle}
+            onTodoEditSubmit={props.onTodoEditSubmit}
+            onTodoDelete={props.onTodoDelete}
           />
         ))}
       </ul>
