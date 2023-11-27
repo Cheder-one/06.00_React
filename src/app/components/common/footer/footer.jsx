@@ -1,11 +1,19 @@
 import { Component } from "react";
+import PropTypes from "prop-types";
 
 import TasksFilter from "../../tasks-filter/tasksFilter";
 import "./footer.scss";
 
 class Footer extends Component {
-  handleBtnClearClick = () => {
-    //
+  handleClearCompleteClick = () => {
+    const filterCompleted = (prev) => {
+      const filtered = prev.todos.filter(
+        (todo) => todo.completed === false
+      );
+      return { ...prev, todos: filtered };
+    };
+
+    this.props.onClearComplete(filterCompleted);
   };
 
   render() {
@@ -17,7 +25,7 @@ class Footer extends Component {
         <TasksFilter />
         <button
           className="clear-completed"
-          onClick={this.handleBtnClearClick}
+          onClick={this.handleClearCompleteClick}
         >
           Clear completed
         </button>
@@ -25,5 +33,10 @@ class Footer extends Component {
     );
   }
 }
+
+Footer.propTypes = {
+  todoCount: PropTypes.number.isRequired,
+  onClearComplete: PropTypes.func.isRequired
+};
 
 export default Footer;

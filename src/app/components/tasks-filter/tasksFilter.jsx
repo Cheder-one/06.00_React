@@ -3,17 +3,41 @@ import { Component } from "react";
 import "./tasksFilter.scss";
 
 class TasksFilter extends Component {
+  state = {
+    selectedEl: "all-todo"
+  };
+
+  handleFilterClick = ({ target }) => {
+    this.setState({ selectedEl: target.className });
+  };
+
+  calcElemClass = (className) => {
+    const { selectedEl } = this.state;
+
+    return className.includes(selectedEl)
+      ? `${className} selected`
+      : className;
+  };
+
   render() {
+    const { selectedEl } = this.state;
+
     return (
-      <ul className="filters">
+      <ul className="filters" onClick={this.handleFilterClick}>
         <li>
-          <button className="selected">All</button>
+          <button className={this.calcElemClass("all-todo")}>
+            All
+          </button>
         </li>
         <li>
-          <button>Active</button>
+          <button className={this.calcElemClass("active-todo")}>
+            Active
+          </button>
         </li>
         <li>
-          <button>Completed</button>
+          <button className={this.calcElemClass("completed-todo")}>
+            Completed
+          </button>
         </li>
       </ul>
     );

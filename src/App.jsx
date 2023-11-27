@@ -29,36 +29,18 @@ class App extends Component {
   };
 
   handleTodoToggle = (callback) => {
-    // const toggleTodo = (prev) => {
-    //   const toggled = prev.todos.map((todo) =>
-    //     todo.id === itemId
-    //       ? { ...todo, completed: !todo.completed }
-    //       : todo
-    //   );
-    //   return { ...prev, todos: toggled };
-    // };
-
     this.setState(callback);
   };
 
   handleTodoEditSubmit = (callback) => {
-    // const editTodo = (prev) => {
-    //   const edited = prev.todos.map((todo) =>
-    //     todo.id === newTodo.id
-    //       ? { ...todo, value: newTodo.value }
-    //       : todo
-    //   );
-    //   return { ...prev, todos: edited };
-    // };
-
     this.setState(callback);
   };
 
   handleTodoDelete = (callback) => {
-    // const filterTodos = (prev) => {
-    //   const filtered = prev.todos.filter(({ id }) => id !== itemId);
-    //   return { ...prev, todos: filtered };
-    // };
+    this.setState(callback);
+  };
+
+  handleTodoClearComplete = (callback) => {
     this.setState(callback);
   };
 
@@ -80,7 +62,10 @@ class App extends Component {
           onTodoEditSubmit={this.handleTodoEditSubmit}
           onTodoDelete={this.handleTodoDelete}
         />
-        <Footer todoCount={state.todos.length} />
+        <Footer
+          todoCount={state.todos.length}
+          onClearComplete={this.handleTodoClearComplete}
+        />
       </>
     );
   }
