@@ -1,3 +1,4 @@
+/* eslint-disable no-fallthrough */
 import { Component } from "react";
 import PropTypes from "prop-types";
 
@@ -7,13 +8,16 @@ class Task extends Component {
   state = {
     isEdit: false,
     editableTodoId: "",
-    newTodoValue: ""
+    newTodoValue: this.props.value
   };
 
   handleTodoClick = (e) => {
     const { hasClassInTarget } = Utils;
     const isEdit = hasClassInTarget(e, "icon-edit");
     const isDelete = hasClassInTarget(e, "icon-destroy");
+    const isCheck =
+      hasClassInTarget(e, "toggle") ||
+      hasClassInTarget(e, "description");
     const editableTodoId = e.currentTarget.id;
 
     if (isEdit) {
@@ -21,7 +25,7 @@ class Task extends Component {
       this.setState((prev) => ({ ...prev, editableTodoId }));
     } else if (isDelete) {
       this.handleTodoDelete(e);
-    } else {
+    } else if (isCheck) {
       this.handleCheckboxClick(e);
     }
   };
@@ -103,12 +107,11 @@ class Utils extends Task {
     const li = document.getElementById(id);
 
     switch (target.className) {
-      case "toggle":
-        li.classList.toggle("completed");
-        break;
       case "description":
         const checkbox = li.querySelector(".toggle");
-        checkbox.click();
+        checkbox.checked = !checkbox.checked;
+      case "toggle":
+        li.classList.toggle("completed");
     }
   };
 }
@@ -116,9 +119,10 @@ class Utils extends Task {
 Task.propTypes = {
   id: PropTypes.string.isRequired,
   value: PropTypes.string.isRequired,
-  valueEdit: PropTypes.string,
   created: PropTypes.number.isRequired,
-  isEdit: PropTypes.bool
+  onTodoToggle: PropTypes.func.isRequired,
+  onTodoEditSubmit: PropTypes.func.isRequired,
+  onTodoDelete: PropTypes.func.isRequired
 };
 
 export default Task;

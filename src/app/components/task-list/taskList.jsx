@@ -29,7 +29,10 @@ class TaskList extends Component {
 
 TaskList.propTypes = {
   todos: PropTypes.array.isRequired,
-  onTodoSubmit: PropTypes.func.isRequired
+  onTodoSubmit: PropTypes.func.isRequired,
+  onTodoToggle: PropTypes.func.isRequired,
+  onTodoEditSubmit: PropTypes.func.isRequired,
+  onTodoDelete: PropTypes.func.isRequired
 };
 
 export default TaskList;
