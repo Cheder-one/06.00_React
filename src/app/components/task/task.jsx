@@ -1,16 +1,29 @@
-/* eslint-disable no-fallthrough */
 import { Component } from "react";
 import PropTypes from "prop-types";
 
 import TaskInput from "../task-input/taskInput";
+import { getDuration } from "../../utils";
 import "./task.scss";
 
 class Task extends Component {
   state = {
     isEdit: false,
     editableId: "",
-    newTodoValue: this.props.value
+    newTodoValue: this.props.value,
+    duration: getDuration(this.props.created)
   };
+
+  componentDidMount() {
+    this.durationInterval = setInterval(() => {
+      this.setState({
+        duration: getDuration(this.props.created)
+      });
+    }, 10000);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.durationInterval);
+  }
 
   handleTodoClick = ({ currentTarget }) => {
     const id = currentTarget.id;
@@ -55,7 +68,7 @@ class Task extends Component {
 
   render() {
     const { id, ...props } = this.props;
-    const { isEdit, newTodoValue } = this.state;
+    const { isEdit, newTodoValue, duration } = this.state;
 
     return (
       <li
@@ -68,10 +81,11 @@ class Task extends Component {
             className="toggle"
             type="checkbox"
             checked={props.isCompleted}
+            onChange={() => null}
           />
           <label>
             <span className="description">{props.value}</span>
-            <span className="created">{props.created}</span>
+            <span className="created">{duration}</span>
           </label>
           <button
             className="icon icon-edit"
@@ -101,7 +115,7 @@ class Task extends Component {
 Task.propTypes = {
   id: PropTypes.string.isRequired,
   value: PropTypes.string.isRequired,
-  created: PropTypes.number.isRequired,
+  created: PropTypes.string.isRequired,
   isCompleted: PropTypes.bool.isRequired,
   onTodoToggle: PropTypes.func.isRequired,
   onTodoEditSubmit: PropTypes.func.isRequired,

@@ -28,13 +28,11 @@ class Footer extends Component {
         <span className="todo-count">
           {this.props.todoCount} items left
         </span>
-
         <TasksFilter
           todoFilter={props.todoFilter}
           todos={props.todos}
           onFilterChange={this.handleFilterChange}
         />
-
         <button
           className="clear-completed"
           onClick={this.handleClearCompletedClick}

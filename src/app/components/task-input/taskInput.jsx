@@ -19,7 +19,8 @@ class TaskInput extends Component {
       const newTodo = {
         id: generateId(),
         value: value.trim(),
-        completed: false
+        completed: false,
+        created: new Date().toISOString()
       };
 
       props.onInputChange({ name, value: "" });

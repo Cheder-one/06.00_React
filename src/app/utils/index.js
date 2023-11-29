@@ -1,3 +1,4 @@
 import { generateId } from "./generateId";
+import { getDuration } from "./getDuration";
 
-export { generateId };
+export { getDuration, generateId };

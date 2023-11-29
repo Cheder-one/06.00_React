@@ -10,7 +10,8 @@ class Utils {
     return [1, 2, 3].map((i) => ({
       id: generateId(),
       value: `Новая задача ${i}`,
-      completed: Boolean(i % 2)
+      completed: Boolean(i % 2),
+      created: new Date().toISOString()
     }));
   };
 }
