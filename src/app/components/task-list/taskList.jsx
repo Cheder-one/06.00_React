@@ -44,11 +44,12 @@ class TaskList extends Component {
 
     return (
       <ul className="todo-list">
-        {props.todos.map(({ id, value }) => (
+        {props.todos.map(({ id, value, completed }) => (
           <Task
             id={id}
             key={id}
             value={value}
+            isCompleted={completed}
             created={0}
             onTodoSubmit={props.onTodoSubmit}
             onTodoToggle={this.handleTodoToggle}

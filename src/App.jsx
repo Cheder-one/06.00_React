@@ -5,17 +5,21 @@ import Footer from "./app/components/common/footer/footer";
 import Header from "./app/components/common/header/header";
 import { generateId } from "./app/utils";
 
+class Utils {
+  static generateStandardTodo = () => {
+    return [1, 2, 3].map((i) => ({
+      id: generateId(),
+      value: `Новая задача ${i}`,
+      completed: Boolean(i % 2)
+    }));
+  };
+}
+
 class App extends Component {
   state = {
     todoInput: "",
     todoFilter: "all",
-    todos: [
-      {
-        id: generateId(),
-        value: "Новая задача",
-        completed: false
-      }
-    ]
+    todos: Utils.generateStandardTodo()
   };
 
   handleInputChange = (callback) => {
