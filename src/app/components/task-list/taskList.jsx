@@ -5,13 +5,6 @@ import "./taskList.scss";
 import Task from "../task/task";
 
 class TaskList extends Component {
-  componentDidUpdate(prevProps) {
-    if (this.props.todos !== prevProps.todos) {
-      console.log(...this.props.todos);
-      this.setState({});
-    }
-  }
-
   handleTodoToggle = (itemId) => {
     const toggleTodo = (prev) => {
       const toggled = prev.todos.map((todo) =>
@@ -19,9 +12,9 @@ class TaskList extends Component {
           ? { ...todo, completed: !todo.completed }
           : todo
       );
+
       return { ...prev, todos: toggled };
     };
-
     this.props.onTodoToggle(toggleTodo);
   };
 
@@ -32,9 +25,9 @@ class TaskList extends Component {
           ? { ...todo, value: newTodo.value }
           : todo
       );
+
       return { ...prev, todos: edited };
     };
-
     this.props.onTodoEditSubmit(editTodo);
   };
 

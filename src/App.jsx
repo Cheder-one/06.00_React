@@ -8,19 +8,15 @@ import { generateId } from "./app/utils";
 class App extends Component {
   state = {
     todoInput: "",
+    todoFilter: "all",
     todos: [
       {
         id: generateId(),
         value: "Новая задача",
         completed: false
       }
-    ],
-    filteredTodos: []
+    ]
   };
-
-  componentDidMount() {
-    this.setState({ filteredTodos: this.state.todos });
-  }
 
   handleInputChange = (callback) => {
     this.setState(callback);
@@ -28,7 +24,6 @@ class App extends Component {
 
   handleTodoSubmit = ({ newTodo }) => {
     this.setState((prev) => ({
-      ...prev,
       todos: [...prev.todos, newTodo]
     }));
   };
@@ -49,15 +44,18 @@ class App extends Component {
     this.setState(callback);
   };
 
-  setFilteredItems = ({ todos }) => {
-    this.setState((prev) => ({
-      ...prev,
-      filteredTodos: todos
-    }));
+  handleFilterChange = (todoFilter) => {
+    this.setState({ todoFilter });
   };
 
   render() {
     const state = this.state;
+    const filteredTodos =
+      state.todoFilter === "all"
+        ? state.todos
+        : state.todoFilter === "active"
+          ? state.todos.filter((todo) => !todo.completed)
+          : state.todos.filter((todo) => todo.completed);
 
     return (
       <>
@@ -68,7 +66,7 @@ class App extends Component {
           onTodoSubmit={this.handleTodoSubmit}
         />
         <TaskList
-          todos={state.filteredTodos}
+          todos={filteredTodos}
           onTodoSubmit={this.handleTodoSubmit}
           onTodoToggle={this.handleTodoToggle}
           onTodoEditSubmit={this.handleTodoEditSubmit}
@@ -76,8 +74,9 @@ class App extends Component {
         />
         <Footer
           todos={state.todos}
+          todoFilter={state.todoFilter}
           todoCount={state.todos.length}
-          onFilterItems={this.setFilteredItems}
+          onFilterItems={this.handleFilterChange}
           onClearComplete={this.handleTodoClearComplete}
         />
       </>

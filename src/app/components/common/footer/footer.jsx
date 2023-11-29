@@ -5,7 +5,11 @@ import TasksFilter from "../../tasks-filter/tasksFilter";
 import "./footer.scss";
 
 class Footer extends Component {
-  handleClearCompleteClick = () => {
+  handleFilterChange = (selectedFilter) => {
+    this.props.onFilterItems(selectedFilter);
+  };
+
+  handleClearCompletedClick = () => {
     const filterCompleted = (prev) => {
       const filtered = prev.todos.filter(
         (todo) => todo.completed === false
@@ -26,13 +30,14 @@ class Footer extends Component {
         </span>
 
         <TasksFilter
+          todoFilter={props.todoFilter}
           todos={props.todos}
-          onFilterItems={props.onFilterItems}
+          onFilterChange={this.handleFilterChange}
         />
 
         <button
           className="clear-completed"
-          onClick={this.handleClearCompleteClick}
+          onClick={this.handleClearCompletedClick}
         >
           Clear completed
         </button>
@@ -43,6 +48,7 @@ class Footer extends Component {
 
 Footer.propTypes = {
   todos: PropTypes.array.isRequired,
+  todoFilter: PropTypes.string.isRequired,
   todoCount: PropTypes.number.isRequired,
   onFilterItems: PropTypes.func.isRequired,
   onClearComplete: PropTypes.func.isRequired
