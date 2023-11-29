@@ -17,12 +17,19 @@ class Footer extends Component {
   };
 
   render() {
+    const props = this.props;
+
     return (
       <footer className="footer">
         <span className="todo-count">
           {this.props.todoCount} items left
         </span>
-        <TasksFilter />
+
+        <TasksFilter
+          todos={props.todos}
+          onFilterItems={props.onFilterItems}
+        />
+
         <button
           className="clear-completed"
           onClick={this.handleClearCompleteClick}
@@ -35,7 +42,9 @@ class Footer extends Component {
 }
 
 Footer.propTypes = {
+  todos: PropTypes.array.isRequired,
   todoCount: PropTypes.number.isRequired,
+  onFilterItems: PropTypes.func.isRequired,
   onClearComplete: PropTypes.func.isRequired
 };
 

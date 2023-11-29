@@ -3,6 +3,7 @@ import { Component } from "react";
 import PropTypes from "prop-types";
 
 import TaskInput from "../task-input/taskInput";
+import "./task.scss";
 
 class Task extends Component {
   state = {

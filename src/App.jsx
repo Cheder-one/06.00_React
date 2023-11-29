@@ -14,8 +14,13 @@ class App extends Component {
         value: "Новая задача",
         completed: false
       }
-    ]
+    ],
+    filteredTodos: []
   };
+
+  componentDidMount() {
+    this.setState({ filteredTodos: this.state.todos });
+  }
 
   handleInputChange = (callback) => {
     this.setState(callback);
@@ -44,6 +49,13 @@ class App extends Component {
     this.setState(callback);
   };
 
+  setFilteredItems = ({ todos }) => {
+    this.setState((prev) => ({
+      ...prev,
+      filteredTodos: todos
+    }));
+  };
+
   render() {
     const state = this.state;
 
@@ -56,14 +68,16 @@ class App extends Component {
           onTodoSubmit={this.handleTodoSubmit}
         />
         <TaskList
-          todos={state.todos}
+          todos={state.filteredTodos}
           onTodoSubmit={this.handleTodoSubmit}
           onTodoToggle={this.handleTodoToggle}
           onTodoEditSubmit={this.handleTodoEditSubmit}
           onTodoDelete={this.handleTodoDelete}
         />
         <Footer
+          todos={state.todos}
           todoCount={state.todos.length}
+          onFilterItems={this.setFilteredItems}
           onClearComplete={this.handleTodoClearComplete}
         />
       </>

@@ -1,41 +1,83 @@
 import { Component } from "react";
+import PropTypes from "prop-types";
 
 import "./tasksFilter.scss";
 
 class TasksFilter extends Component {
   state = {
-    selectedEl: "all-todo"
+    selectedFilter: "all"
   };
 
-  handleFilterClick = ({ target }) => {
-    this.setState({ selectedEl: target.className });
+  handleFilterChange = ({ target }) => {
+    const props = this.props;
+    const { todoFilter } = target.dataset;
+    const { selectedFilter } = this.state;
+
+    if (todoFilter) {
+      this.setState({ selectedFilter: todoFilter });
+    }
+
+    switch (selectedFilter) {
+      case "all":
+        console.log("call: ALL");
+
+        props.onFilterItems({
+          todos: [
+            { id: "2", value: "Active", completed: false },
+            { id: "3", value: "completed", completed: true }
+          ]
+        });
+        break;
+      case "active":
+        console.log("call: ACTIVE");
+
+        props.onFilterItems({
+          todos: [{ id: "2", value: "Active", completed: false }]
+        });
+        break;
+      case "completed":
+        console.log("call: COMPLETED");
+
+        props.onFilterItems({
+          todos: [{ id: "3", value: "completed", completed: true }]
+        });
+        break;
+    }
   };
 
-  calcElemClass = (className) => {
-    const { selectedEl } = this.state;
-
-    return className.includes(selectedEl)
+  calcClassName = (className) => {
+    return className === this.state.selectedFilter
       ? `${className} selected`
-      : className;
+      : `${className}`;
   };
 
   render() {
-    const { selectedEl } = this.state;
+    const { selectedFilter } = this.state;
+    // console.log(selectedFilter);
 
     return (
-      <ul className="filters" onClick={this.handleFilterClick}>
+      <ul className="filters" onClick={this.handleFilterChange}>
         <li>
-          <button className={this.calcElemClass("all-todo")}>
+          <button
+            data-todo-filter="all"
+            className={this.calcClassName("all")}
+          >
             All
           </button>
         </li>
         <li>
-          <button className={this.calcElemClass("active-todo")}>
+          <button
+            data-todo-filter="active"
+            className={this.calcClassName("active")}
+          >
             Active
           </button>
         </li>
         <li>
-          <button className={this.calcElemClass("completed-todo")}>
+          <button
+            data-todo-filter="completed"
+            className={this.calcClassName("completed")}
+          >
             Completed
           </button>
         </li>
@@ -43,5 +85,14 @@ class TasksFilter extends Component {
     );
   }
 }
+
+TasksFilter.propTypes = {
+  todos: PropTypes.array.isRequired,
+  onFilterItems: PropTypes.func.isRequired
+};
+
+// class Utils extends TasksFilter {
+//   //
+// }
 
 export default TasksFilter;
