@@ -3,13 +3,13 @@ module.exports = {
     browser: true,
     es2021: true,
   },
-  // parser: '@babel/eslint-parser',
+  parser: '@babel/eslint-parser',
   parserOptions: {
+    ecmaVersion: 'latest',
+    sourceType: 'module',
     ecmaFeatures: {
       jsx: true,
     },
-    ecmaVersion: 'latest',
-    sourceType: 'module',
     requireConfigFile: false,
   },
   // $ npx install-peerdeps --dev eslint-config-airbnb
