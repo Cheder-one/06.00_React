@@ -1,7 +1,9 @@
-import { formatDistanceToNow } from "date-fns";
+import { formatDistanceToNow } from 'date-fns';
 
-export const getDuration = (created) => {
+const getDuration = (created) => {
   return formatDistanceToNow(new Date(created), {
-    includeSeconds: true
+    includeSeconds: true,
   });
 };
+
+export default getDuration;

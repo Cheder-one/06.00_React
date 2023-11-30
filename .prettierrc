@@ -1,14 +1,13 @@
 {
-  "trailingComma": "none",
-  "tabWidth": 2,
-  "printWidth": 70,
   "semi": true,
-  "singleQuote": false,
-  "quoteProps": "preserve",
+  "tabWidth": 2,
+  "singleQuote": true,
+  "trailingComma": "es5",
+  "endOfLine": "lf",
+  "printWidth": 70,
   "arrowParens": "always",
   "bracketSpacing": true,
   "jsxBracketSameLine": false,
   "proseWrap": "never",
-  "htmlWhitespaceSensitivity": "strict",
-  "endOfLine": "lf"
+  "htmlWhitespaceSensitivity": "strict"
 }

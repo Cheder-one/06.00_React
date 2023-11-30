@@ -1,7 +1,9 @@
-import { Component } from "react";
-import PropTypes from "prop-types";
+/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 
-import "./tasksFilter.scss";
+import { Component } from 'react';
+import PropTypes from 'prop-types';
+
+import './tasksFilter.scss';
 
 class TasksFilter extends Component {
   handleFilterChange = (event) => {
@@ -13,35 +15,50 @@ class TasksFilter extends Component {
     }
   };
 
+  handlePressFilterChange = (event) => {
+    if (event.key === 'Enter') {
+      this.handleFilterChange(event);
+    }
+  };
+
   calcClassName = (className) => {
-    return className === this.props.todoFilter
+    const { todoFilter } = this.props;
+
+    return className === todoFilter
       ? `${className} selected`
       : `${className}`;
   };
 
   render() {
     return (
-      <ul className="filters" onClick={this.handleFilterChange}>
+      <ul
+        className="filters"
+        onClick={this.handleFilterChange}
+        onKeyDown={this.handlePressFilterChange}
+      >
         <li>
           <button
+            type="button"
             data-todo-filter="all"
-            className={this.calcClassName("all")}
+            className={this.calcClassName('all')}
           >
             All
           </button>
         </li>
         <li>
           <button
+            type="button"
             data-todo-filter="active"
-            className={this.calcClassName("active")}
+            className={this.calcClassName('active')}
           >
             Active
           </button>
         </li>
         <li>
           <button
+            type="button"
             data-todo-filter="completed"
-            className={this.calcClassName("completed")}
+            className={this.calcClassName('completed')}
           >
             Completed
           </button>
@@ -52,9 +69,8 @@ class TasksFilter extends Component {
 }
 
 TasksFilter.propTypes = {
-  todos: PropTypes.array.isRequired,
   todoFilter: PropTypes.string.isRequired,
-  onFilterChange: PropTypes.func.isRequired
+  onFilterChange: PropTypes.func.isRequired,
 };
 
 export default TasksFilter;

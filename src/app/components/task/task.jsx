@@ -1,69 +1,91 @@
-import { Component } from "react";
-import PropTypes from "prop-types";
+/* eslint-disable no-nested-ternary */
 
-import TaskInput from "../task-input/taskInput";
-import { getDuration } from "../../utils";
-import "./task.scss";
+import { Component } from 'react';
+import PropTypes from 'prop-types';
+
+import TaskInput from '../task-input/taskInput';
+import { getDuration } from '../../utils';
 
 class Task extends Component {
-  state = {
-    isEdit: false,
-    editableId: "",
-    newTodoValue: this.props.value,
-    duration: getDuration(this.props.created)
-  };
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      isEdit: false,
+      editableId: '',
+      newTodoValue: props.value,
+      duration: getDuration(props.created),
+    };
+  }
 
   componentDidMount() {
     this.durationInterval = setInterval(() => {
+      const { created } = this.props;
+
       this.setState({
-        duration: getDuration(this.props.created)
+        duration: getDuration(created),
       });
-    }, 10000);
+    }, 5000);
   }
 
   componentWillUnmount() {
     clearInterval(this.durationInterval);
   }
 
-  handleTodoClick = ({ currentTarget }) => {
-    const id = currentTarget.id;
-    this.props.onTodoToggle(id);
+  handleCheckboxChange = (id) => {
+    const { onTodoToggle } = this.props;
+    onTodoToggle(id);
   };
 
   toggleTodoEdit = () => {
     this.setState((prev) => ({ isEdit: !prev.isEdit }));
   };
 
-  handleTodoEdit = (e, editableId) => {
-    e.preventDefault();
+  handleTodoEdit = (editableId) => {
     this.toggleTodoEdit();
     this.setState((prev) => ({ ...prev, editableId }));
   };
 
+  // handleTodoEditCancel = () => {
+  //   this.toggleTodoEdit();
+  // }
+
+  // handlePress = (event) => {
+  //   if (event.key === 'Enter') {
+  //     this.toggleTodoEdit();
+  //   }
+  // };
+
   handleInputChange = ({ name, value }) => {
-    this.setState((prev) => ({ ...prev, [name]: value }));
+    if (value)
+      this.setState((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
   };
 
   handleEditedTodoSubmit = () => {
+    const { onTodoEditSubmit } = this.props;
     const { editableId, newTodoValue } = this.state;
+
     const newTodo = {
       id: editableId,
-      value: newTodoValue
+      value: newTodoValue,
     };
 
-    this.props.onTodoEditSubmit({ newTodo });
+    onTodoEditSubmit({ newTodo });
     this.toggleTodoEdit();
   };
 
-  handleTodoDelete = (e, id) => {
-    e.preventDefault();
-    this.props.onTodoDelete(id);
+  handleTodoDelete = (id) => {
+    const { onTodoDelete } = this.props;
+    onTodoDelete(id);
   };
 
   calcClassName() {
     const { isCompleted } = this.props;
     const { isEdit } = this.state;
-    return isEdit ? "editing" : isCompleted ? "completed" : "";
+    return isEdit ? 'editing' : isCompleted ? 'completed' : '';
   }
 
   render() {
@@ -71,29 +93,34 @@ class Task extends Component {
     const { isEdit, newTodoValue, duration } = this.state;
 
     return (
-      <li
-        id={id}
-        className={this.calcClassName()}
-        onClick={this.handleTodoClick}
-      >
+      <li id={id} className={this.calcClassName()}>
         <div className="view">
           <input
+            id={`_${id}`}
             className="toggle"
             type="checkbox"
             checked={props.isCompleted}
-            onChange={() => null}
+            onChange={() => this.handleCheckboxChange(id)}
           />
-          <label>
-            <span className="description">{props.value}</span>
+          <label htmlFor={`_${id}`}>
+            <button
+              type="button"
+              className="description"
+              onClick={() => this.handleTodoEdit(id)}
+            >
+              {props.value}
+            </button>
             <span className="created">{duration}</span>
           </label>
           <button
+            type="button"
             className="icon icon-edit"
-            onClick={(e) => this.handleTodoEdit(e, id)}
+            onClick={() => this.handleTodoEdit(id)}
           />
           <button
+            type="button"
             className="icon icon-destroy"
-            onClick={(e) => this.handleTodoDelete(e, id)}
+            onClick={() => this.handleTodoDelete(id)}
           />
         </div>
         {isEdit && (
@@ -119,7 +146,7 @@ Task.propTypes = {
   isCompleted: PropTypes.bool.isRequired,
   onTodoToggle: PropTypes.func.isRequired,
   onTodoEditSubmit: PropTypes.func.isRequired,
-  onTodoDelete: PropTypes.func.isRequired
+  onTodoDelete: PropTypes.func.isRequired,
 };
 
 export default Task;

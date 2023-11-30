@@ -1,62 +1,76 @@
 module.exports = {
   env: {
     browser: true,
-    es2021: true
+    es2021: true,
   },
-  extends: [
-    "standard",
-    "eslint:recommended",
-    "plugin:react/recommended",
-    "plugin:react/jsx-runtime",
-    "plugin:prettier/recommended",
-    "plugin:react-hooks/recommended",
-    "plugin:import/errors",
-    "plugin:import/warnings"
-  ],
-  ignorePatterns: ["node_modules", "dist", "build"],
-  overrides: [],
+  // parser: '@babel/eslint-parser',
   parserOptions: {
-    ecmaVersion: "latest",
-    sourceType: "module"
+    ecmaFeatures: {
+      jsx: true,
+    },
+    ecmaVersion: 'latest',
+    sourceType: 'module',
+    requireConfigFile: false,
   },
-  plugins: ["react-refresh", "react", "prettier", "import"],
+  // $ npx install-peerdeps --dev eslint-config-airbnb
+  extends: [
+    'airbnb',
+    'eslint:recommended',
+    'plugin:prettier/recommended',
+    'plugin:react/recommended',
+    'plugin:react/jsx-runtime',
+    'plugin:react-hooks/recommended',
+    'plugin:jsx-a11y/recommended',
+    'plugin:import/errors',
+    'plugin:import/warnings',
+  ],
+  plugins: ['react', 'react-refresh', 'prettier', 'import'],
+  ignorePatterns: ['node_modules', 'dist', 'build'],
+  overrides: [],
+
+  // 0 - off 1 - warn 2 - error
   rules: {
-    "react-refresh/only-export-components": "warn",
-    "react/react-in-jsx-scope": "off",
-    "import/no-unresolved": [2, { caseSensitive: false }],
-    "import/order": [
-      2,
+    indent: ['warn', 2],
+    'prettier/prettier': 'warn',
+    'linebreak-style': ['warn', 'unix'],
+    quotes: ['error', 'single', { allowTemplateLiterals: true }],
+    semi: ['warn', 'always'],
+    'react/prop-types': 'warn',
+    'react/react-in-jsx-scope': 'off',
+    'react-refresh/only-export-components': 'warn',
+    'react/jsx-filename-extension': [
+      'warn',
+      { extensions: ['.js', '.jsx'] },
+    ],
+    'import/no-unresolved': ['error', { caseSensitive: false }],
+    'no-unused-vars': 'warn',
+    // 'no-case-declarations': 'off',
+    'space-before-function-paren': [
+      'warn',
+      { anonymous: 'always', named: 'never' },
+    ],
+    'jsx-a11y/no-noninteractive-element-interactions': 'off',
+    'import/order': [
+      'error',
       {
         groups: [
-          "builtin",
-          "external",
-          "internal",
-          "parent",
-          "sibling",
-          "index"
+          'builtin',
+          'external',
+          'internal',
+          'parent',
+          'sibling',
+          'index',
         ],
-        "newlines-between": "always"
-      }
+        'newlines-between': 'always',
+      },
     ],
-    indent: "off",
-    "no-unused-vars": "warn",
-    "no-case-declarations": "off",
-    "react/prop-types": "warn",
-    "space-before-function-paren": [
-      "error",
-      { anonymous: "always", named: "never" }
-    ],
-    "prettier/prettier": "warn",
-    "linebreak-style": [0, "windows"],
-    quotes: ["error", "double", { allowTemplateLiterals: true }],
-    semi: [2, "always"]
   },
   settings: {
-    "import/resolver": {
+    'import/resolver': {
       node: {
-        extensions: [".js", ".jsx"], // Указывает расширение файлов, которые можно импортировать.
-        moduleDirectory: ["node_modules", "src/"] // Пути для поиска модулей при импорте.
-      }
-    }
-  }
+        extensions: ['.js', '.jsx', '.ts', '.tsx'],
+        moduleDirectory: ['node_modules', 'src/'],
+      },
+    },
+  },
 };

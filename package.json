@@ -14,13 +14,18 @@
     "react-dom": "^18.2.0",
     "react-scripts": "^5.0.1",
     "sass": "^1.69.5",
+    "todo-app": "^1.0.3",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "lint": "eslint src/**/*.{js,jsx,ts,tsx}",
+    "lint:fix": "eslint src/**/*.{js,jsx,ts,tsx} --fix",
+    "format": "prettier --write .",
+    "prepare": "husky install"
   },
   "eslintConfig": {
     "extends": [
@@ -28,6 +33,7 @@
       "react-app/jest"
     ]
   },
+  
   "browserslist": {
     "production": [
       ">0.2%",
@@ -41,15 +47,23 @@
     ]
   },
   "devDependencies": {
+    "@babel/core": "^7.23.5",
+    "@babel/eslint-parser": "^7.23.3",
+    "babel-eslint": "^10.1.0",
     "eslint": "^8.54.0",
+    "eslint-config-airbnb": "^19.0.4",
     "eslint-config-prettier": "^9.0.0",
     "eslint-config-standard": "^17.1.0",
     "eslint-plugin-import": "^2.29.0",
+    "eslint-plugin-jsx-a11y": "^6.8.0",
     "eslint-plugin-n": "^16.3.1",
     "eslint-plugin-prettier": "^5.0.1",
     "eslint-plugin-promise": "^6.1.1",
     "eslint-plugin-react": "^7.33.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.4",
+    "husky": "^8.0.0",
+    "lint-staged": "^15.1.0",
     "prettier": "^3.1.0"
   }
 }

@@ -1,4 +1,5 @@
-import { generateId } from "./generateId";
-import { getDuration } from "./getDuration";
+import generateId from './generateId';
+import generateTodo from './generateTodo';
+import getDuration from './getDuration';
 
-export { getDuration, generateId };
+export { generateTodo, getDuration, generateId };

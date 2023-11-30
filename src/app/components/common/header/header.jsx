@@ -1,16 +1,18 @@
-import { Component } from "react";
-import PropTypes from "prop-types";
+import { Component } from 'react';
+import PropTypes from 'prop-types';
 
-import TaskInput from "../../task-input/taskInput";
+import TaskInput from '../../task-input/taskInput';
 
 class Header extends Component {
   handleInputChange = ({ name, value }) => {
+    const { onInputChange } = this.props;
+
     const inputValue = (prev) => ({ ...prev, [name]: value });
-    this.props.onInputChange(inputValue);
+    onInputChange(inputValue);
   };
 
   render() {
-    const props = this.props;
+    const { props } = this;
 
     return (
       <header className="header">
@@ -28,11 +30,15 @@ class Header extends Component {
   }
 }
 
+Header.defaultProps = {
+  title: '',
+};
+
 Header.propTypes = {
   title: PropTypes.string,
   inputValue: PropTypes.string.isRequired,
   onInputChange: PropTypes.func.isRequired,
-  onTodoSubmit: PropTypes.func.isRequired
+  onTodoSubmit: PropTypes.func.isRequired,
 };
 
 export default Header;

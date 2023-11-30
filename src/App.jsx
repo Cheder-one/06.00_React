@@ -1,27 +1,22 @@
-import { Component } from "react";
+/* eslint-disable no-nested-ternary */
 
-import TaskList from "./app/components/task-list/taskList";
-import Footer from "./app/components/common/footer/footer";
-import Header from "./app/components/common/header/header";
-import { generateId } from "./app/utils";
+import { Component } from 'react';
 
-class Utils {
-  static generateStandardTodo = () => {
-    return [1, 2, 3].map((i) => ({
-      id: generateId(),
-      value: `Новая задача ${i}`,
-      completed: Boolean(i % 2),
-      created: new Date().toISOString()
-    }));
-  };
-}
+import TaskList from './app/components/task-list/taskList';
+import Footer from './app/components/common/footer/footer';
+import Header from './app/components/common/header/header';
+import { generateTodo } from './app/utils';
 
 class App extends Component {
-  state = {
-    todoInput: "",
-    todoFilter: "all",
-    todos: Utils.generateStandardTodo()
-  };
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      todoInput: '',
+      todoFilter: 'all',
+      todos: generateTodo(),
+    };
+  }
 
   handleInputChange = (callback) => {
     this.setState(callback);
@@ -29,7 +24,7 @@ class App extends Component {
 
   handleTodoSubmit = ({ newTodo }) => {
     this.setState((prev) => ({
-      todos: [...prev.todos, newTodo]
+      todos: [...prev.todos, newTodo],
     }));
   };
 
@@ -54,11 +49,12 @@ class App extends Component {
   };
 
   render() {
-    const state = this.state;
+    const { state } = this;
+
     const filteredTodos =
-      state.todoFilter === "all"
+      state.todoFilter === 'all'
         ? state.todos
-        : state.todoFilter === "active"
+        : state.todoFilter === 'active'
           ? state.todos.filter((todo) => !todo.completed)
           : state.todos.filter((todo) => todo.completed);
 
@@ -72,7 +68,6 @@ class App extends Component {
         />
         <TaskList
           todos={filteredTodos}
-          onTodoSubmit={this.handleTodoSubmit}
           onTodoToggle={this.handleTodoToggle}
           onTodoEditSubmit={this.handleTodoEditSubmit}
           onTodoDelete={this.handleTodoDelete}
