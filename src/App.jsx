@@ -7,7 +7,6 @@ import Footer from './app/components/common/footer/footer';
 import Header from './app/components/common/header/header';
 import { generateTodo } from './app/utils';
 
-xss;
 class App extends Component {
   constructor(props) {
     super(props);
