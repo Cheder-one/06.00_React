@@ -1,10 +1,8 @@
-/* eslint-disable no-nested-ternary */
-
 import { Component } from 'react';
 
-import TaskList from './app/components/task-list/taskList';
-import Footer from './app/components/common/footer/footer';
-import Header from './app/components/common/header/header';
+import TaskList from './app/components/taskList/TaskList';
+import Footer from './app/components/common/footer/Footer';
+import Header from './app/components/common/header/Header';
 import { generateTodo } from './app/utils';
 
 class App extends Component {
@@ -51,12 +49,14 @@ class App extends Component {
   render() {
     const { state } = this;
 
-    const filteredTodos =
-      state.todoFilter === 'all'
-        ? state.todos
-        : state.todoFilter === 'active'
-          ? state.todos.filter((todo) => !todo.completed)
-          : state.todos.filter((todo) => todo.completed);
+    let filteredTodos;
+    if (state.todoFilter === 'all') {
+      filteredTodos = state.todos;
+    } else if (state.todoFilter === 'active') {
+      filteredTodos = state.todos.filter((todo) => !todo.completed);
+    } else {
+      filteredTodos = state.todos.filter((todo) => todo.completed);
+    }
 
     return (
       <>

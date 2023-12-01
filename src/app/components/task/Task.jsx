@@ -1,9 +1,7 @@
-/* eslint-disable no-nested-ternary */
-
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import TaskInput from '../task-input/taskInput';
+import TaskInput from '../taskInput/TaskInput';
 import { getDuration } from '../../utils';
 
 class Task extends Component {
@@ -46,16 +44,6 @@ class Task extends Component {
     this.setState((prev) => ({ ...prev, editableId }));
   };
 
-  // handleTodoEditCancel = () => {
-  //   this.toggleTodoEdit();
-  // }
-
-  // handlePress = (event) => {
-  //   if (event.key === 'Enter') {
-  //     this.toggleTodoEdit();
-  //   }
-  // };
-
   handleInputChange = ({ name, value }) => {
     if (value)
       this.setState((prev) => ({
@@ -85,7 +73,10 @@ class Task extends Component {
   calcClassName() {
     const { isCompleted } = this.props;
     const { isEdit } = this.state;
-    return isEdit ? 'editing' : isCompleted ? 'completed' : '';
+
+    if (isEdit) return 'editing';
+    if (isCompleted) return 'completed';
+    return '';
   }
 
   render() {
@@ -103,13 +94,13 @@ class Task extends Component {
             onChange={() => this.handleCheckboxChange(id)}
           />
           <label htmlFor={`_${id}`}>
-            <button
-              type="button"
+            <span
+              // type="button"
               className="description"
-              onClick={() => this.handleTodoEdit(id)}
+              // onClick={() => this.handleTodoEdit(id)}
             >
               {props.value}
-            </button>
+            </span>
             <span className="created">{duration}</span>
           </label>
           <button

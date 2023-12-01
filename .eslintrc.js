@@ -38,18 +38,17 @@ module.exports = {
     'react/prop-types': 'warn',
     'react/react-in-jsx-scope': 'off',
     'react-refresh/only-export-components': 'warn',
+    'react/prefer-stateless-function': 'error',
     'react/jsx-filename-extension': [
       'warn',
       { extensions: ['.js', '.jsx'] },
     ],
     'import/no-unresolved': ['error', { caseSensitive: false }],
     'no-unused-vars': 'warn',
-    // 'no-case-declarations': 'off',
     'space-before-function-paren': [
       'warn',
       { anonymous: 'always', named: 'never' },
     ],
-    'jsx-a11y/no-noninteractive-element-interactions': 'off',
     'import/order': [
       'error',
       {

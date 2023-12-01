@@ -1,13 +1,15 @@
-import { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import Task from '../task/task';
-import './taskList.scss';
+import Task from '../task/Task';
+import './TaskList.scss';
 
-class TaskList extends Component {
-  handleTodoToggle = (itemId) => {
-    const { onTodoToggle } = this.props;
-
+function TaskList({
+  todos,
+  onTodoToggle,
+  onTodoEditSubmit,
+  onTodoDelete,
+}) {
+  const handleTodoToggle = (itemId) => {
     const toggleTodo = (prev) => {
       const toggled = prev.todos.map((todo) =>
         todo.id === itemId
@@ -20,9 +22,7 @@ class TaskList extends Component {
     onTodoToggle(toggleTodo);
   };
 
-  handleTodoEditSubmit = ({ newTodo }) => {
-    const { onTodoEditSubmit } = this.props;
-
+  const handleTodoEditSubmit = ({ newTodo }) => {
     const editTodo = (prev) => {
       const edited = prev.todos.map((todo) =>
         todo.id === newTodo.id
@@ -35,9 +35,7 @@ class TaskList extends Component {
     onTodoEditSubmit(editTodo);
   };
 
-  handleTodoDelete = (itemId) => {
-    const { onTodoDelete } = this.props;
-
+  const handleTodoDelete = (itemId) => {
     const filterTodos = (prev) => {
       const filtered = prev.todos.filter(({ id }) => id !== itemId);
       return { ...prev, todos: filtered };
@@ -45,26 +43,22 @@ class TaskList extends Component {
     onTodoDelete(filterTodos);
   };
 
-  render() {
-    const { props } = this;
-
-    return (
-      <ul className="todo-list">
-        {props.todos.map((todo) => (
-          <Task
-            id={todo.id}
-            key={todo.id}
-            value={todo.value}
-            created={todo.created}
-            isCompleted={todo.completed}
-            onTodoToggle={this.handleTodoToggle}
-            onTodoEditSubmit={this.handleTodoEditSubmit}
-            onTodoDelete={this.handleTodoDelete}
-          />
-        ))}
-      </ul>
-    );
-  }
+  return (
+    <ul className="todo-list">
+      {todos.map((todo) => (
+        <Task
+          id={todo.id}
+          key={todo.id}
+          value={todo.value}
+          created={todo.created}
+          isCompleted={todo.completed}
+          onTodoToggle={handleTodoToggle}
+          onTodoEditSubmit={handleTodoEditSubmit}
+          onTodoDelete={handleTodoDelete}
+        />
+      ))}
+    </ul>
+  );
 }
 
 TaskList.propTypes = {
