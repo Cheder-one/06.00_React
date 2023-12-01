@@ -1,1 +1,1 @@
-GitPage: https://06-00-react.vercel.app/
+https://06-00-react.vercel.app/
