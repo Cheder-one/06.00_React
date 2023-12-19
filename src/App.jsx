@@ -29,6 +29,7 @@ class App extends Component {
     this.setState((prev) => ({
       todos: [...prev.todos, newTodo],
     }));
+    this.clearInput();
   };
 
   handleTodoToggle = (callback) => {
@@ -49,6 +50,13 @@ class App extends Component {
 
   handleFilterChange = (todoFilter) => {
     this.setState({ todoFilter });
+  };
+
+  clearInput = () => {
+    this.setState({
+      todoInput: '',
+      todoInputTimer: { min: '', sec: '' },
+    });
   };
 
   render() {

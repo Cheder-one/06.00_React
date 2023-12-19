@@ -2,7 +2,7 @@ import { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import TaskInput from '../taskInput/TaskInput';
-import { getDuration } from '../../utils';
+import { formatTimer, getDuration } from '../../utils';
 import Timer from '../timer/Timer';
 
 class Task extends Component {
@@ -28,6 +28,16 @@ class Task extends Component {
     }, 5000);
   }
 
+  componentDidUpdate(pvp) {
+    const { value, timer } = this.props;
+    if (pvp.value !== value || pvp.timer !== timer) {
+      this.setState({
+        newTodo: value,
+        newTodoTimer: timer,
+      });
+    }
+  }
+
   componentWillUnmount() {
     clearInterval(this.durationInterval);
   }
@@ -46,24 +56,24 @@ class Task extends Component {
     this.setState((prev) => ({ ...prev, editableId }));
   };
 
-  handleInputChange = (cb) => {
-    this.setState(cb);
+  handleInputChange = (callback) => {
+    this.setState(callback);
   };
 
-  handleTimerChange = (cb) => {
-    this.setState(cb);
+  handleTimerChange = (callback) => {
+    this.setState(callback);
   };
 
   handleEditedTodoSubmit = () => {
-    const { onTodoEditSubmit } = this.props;
     const { editableId, newTodo, newTodoTimer } = this.state;
+    const { onTodoEditSubmit } = this.props;
+    const { min, sec } = newTodoTimer;
 
     const todo = {
       id: editableId,
       value: newTodo,
-      timer: newTodoTimer,
+      timer: formatTimer({ min, sec }),
     };
-    console.log(todo);
 
     onTodoEditSubmit({ newTodo: todo });
     this.toggleTodoEdit();
@@ -138,6 +148,10 @@ class Task extends Component {
 Task.propTypes = {
   id: PropTypes.string.isRequired,
   value: PropTypes.string.isRequired,
+  timer: PropTypes.shape({
+    min: PropTypes.string.isRequired,
+    sec: PropTypes.string.isRequired,
+  }).isRequired,
   created: PropTypes.string.isRequired,
   isCompleted: PropTypes.bool.isRequired,
   onTodoToggle: PropTypes.func.isRequired,

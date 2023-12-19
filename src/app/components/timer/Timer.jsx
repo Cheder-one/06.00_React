@@ -11,12 +11,11 @@ class Timer extends Component {
   }
 
   render() {
-    const { value } = this.props;
-    const { min, sec } = value;
+    // prettier-ignore
+    const { value  } = this.props;
+    const { min, sec } = formatTimer({ ...value });
 
-    return (
-      <span className="todo-timer">{formatTimer(min, sec)}</span>
-    );
+    return <span className="todo-timer">{`${min}:${sec}`}</span>;
   }
 }
 

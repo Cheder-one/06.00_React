@@ -3,7 +3,7 @@
 
 import PropTypes from 'prop-types';
 
-import { generateId } from '../../utils';
+import { formatTimer, generateId } from '../../utils';
 // import './TaskInput.scss';
 
 function TaskInput({
@@ -38,7 +38,7 @@ function TaskInput({
     return {
       id: generateId(),
       value: input,
-      timer,
+      timer: formatTimer({ ...timer }),
       completed: false,
       created: new Date().toISOString(),
     };

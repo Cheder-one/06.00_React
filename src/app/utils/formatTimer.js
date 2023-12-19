@@ -1,4 +1,4 @@
-const formatTimer = (min, sec) => {
+const formatTimer = ({ min, sec }) => {
   const totalSec = Number(min) * 60 + Number(sec);
 
   const mm = Math.floor(totalSec / 60)
@@ -6,9 +6,7 @@ const formatTimer = (min, sec) => {
     .padStart(2, '0');
   const ss = (totalSec % 60).toString().padStart(2, '0');
 
-  return `${mm}:${ss}`;
+  return { min: mm, sec: ss };
 };
-
-formatTimer(120, 120);
 
 export default formatTimer;
