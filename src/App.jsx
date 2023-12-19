@@ -11,12 +11,17 @@ class App extends Component {
 
     this.state = {
       todoInput: '',
+      todoInputTimer: { min: '', sec: '' },
       todoFilter: 'all',
       todos: generateTodo(),
     };
   }
 
   handleInputChange = (callback) => {
+    this.setState(callback);
+  };
+
+  handleTimerChange = (callback) => {
     this.setState(callback);
   };
 
@@ -63,7 +68,9 @@ class App extends Component {
         <Header
           title="Todos"
           inputValue={state.todoInput}
+          timerValue={state.todoInputTimer}
           onInputChange={this.handleInputChange}
+          onTimerChange={this.handleTimerChange}
           onTodoSubmit={this.handleTodoSubmit}
         />
         <TaskList

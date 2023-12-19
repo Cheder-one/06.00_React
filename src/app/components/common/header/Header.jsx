@@ -2,23 +2,37 @@ import PropTypes from 'prop-types';
 
 import TaskInput from '../../taskInput/TaskInput';
 
-function Header({ title, inputValue, onInputChange, onTodoSubmit }) {
-  const handleInputChange = (data) => {
-    onInputChange((prev) => ({
-      ...prev,
-      [data.name]: data.value,
-    }));
-  };
+function Header({
+  title,
+  inputValue,
+  timerValue,
+  onInputChange,
+  onTimerChange,
+  onTodoSubmit,
+}) {
+  // const handleInputChange = ({ name, value }) => {
+  //   onInputChange({ [name]: value });
+  // };
+
+  // const handleTimerChange = ({ name, value }) => {
+  // onTimerChange((prev) => ({
+  // [name]: {
+  // ...prev[name],
+  // [name]: value[name],
+  // },
+  // }));
+  // };
 
   return (
     <header className="header">
       {title && <h1>{title}</h1>}
-
       <TaskInput
         name="todoInput"
         value={inputValue}
+        timerValue={timerValue}
         autoFocus
-        onInputChange={handleInputChange}
+        onInputChange={onInputChange}
+        onTimerChange={onTimerChange}
         onTodoSubmit={onTodoSubmit}
       />
     </header>
@@ -32,7 +46,12 @@ Header.defaultProps = {
 Header.propTypes = {
   title: PropTypes.string,
   inputValue: PropTypes.string.isRequired,
+  timerValue: PropTypes.shape({
+    min: PropTypes.string.isRequired,
+    sec: PropTypes.string.isRequired,
+  }).isRequired,
   onInputChange: PropTypes.func.isRequired,
+  onTimerChange: PropTypes.func.isRequired,
   onTodoSubmit: PropTypes.func.isRequired,
 };
 

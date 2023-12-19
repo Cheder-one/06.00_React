@@ -1,55 +1,97 @@
+/* eslint-disable no-restricted-globals */
 /* eslint-disable jsx-a11y/no-autofocus */
 
 import PropTypes from 'prop-types';
 
 import { generateId } from '../../utils';
-import './TaskInput.scss';
+// import './TaskInput.scss';
 
 function TaskInput({
   name,
   value,
+  timerValue,
   placeholder,
   className,
   autoFocus,
   onInputChange,
+  onTimerChange,
   onTodoSubmit,
 }) {
   const handleInputChange = ({ target }) => {
-    onInputChange({ name, value: target.value });
+    onInputChange({ [name]: target.value });
   };
 
-  const handleSubmit = ({ key }) => {
-    const inputValue = value.trim();
-    if (!inputValue) return;
+  const handleTimerChange = ({ target }) => {
+    const timer = `${name}Timer`;
 
-    if (key === 'Enter') {
-      const newTodo = {
-        id: generateId(),
-        value: inputValue,
-        completed: false,
-        created: new Date().toISOString(),
-      };
+    if (isNaN(target.value)) return;
 
-      onInputChange({ name, value: '' });
-      onTodoSubmit({ newTodo });
-    }
+    onTimerChange((prev) => ({
+      [timer]: {
+        ...prev[timer],
+        [target.name]: target.value,
+      },
+    }));
+  };
+
+  const createNewTodo = (input, timer) => {
+    return {
+      id: generateId(),
+      value: input,
+      timer,
+      completed: false,
+      created: new Date().toISOString(),
+    };
+  };
+
+  const handleInputSubmit = (e) => {
+    const input = value.trim();
+    e.preventDefault();
+
+    if (!input) return;
+
+    const newTodo = createNewTodo(input, timerValue);
+
+    onInputChange({ name, value: '' });
+    onTodoSubmit({ newTodo });
   };
 
   return (
-    <input
-      name={name}
-      value={value}
-      autoFocus={autoFocus}
-      className={className || 'new-todo'}
-      placeholder={placeholder}
-      onChange={handleInputChange}
-      onKeyDown={handleSubmit}
-    />
+    <form className="new-todo-form" onSubmit={handleInputSubmit}>
+      <input
+        name={name}
+        value={value}
+        autoFocus={autoFocus}
+        className={className || 'new-todo'}
+        placeholder={placeholder}
+        onChange={handleInputChange}
+        // onKeyDown={handleSubmit}
+      />
+      <input
+        name="min"
+        value={timerValue.min}
+        className="new-todo-form__timer"
+        placeholder="Min"
+        onChange={handleTimerChange}
+      />
+      <input
+        name="sec"
+        value={timerValue.sec}
+        className="new-todo-form__timer"
+        placeholder="Sec"
+        onChange={handleTimerChange}
+      />
+      <button
+        className="new-todo-form__submit"
+        style={{ display: 'none' }}
+        type="submit"
+      />
+    </form>
   );
 }
 
 TaskInput.defaultProps = {
-  placeholder: 'What needs to be done?',
+  placeholder: 'Task',
   className: '',
   autoFocus: false,
 };
@@ -57,10 +99,15 @@ TaskInput.defaultProps = {
 TaskInput.propTypes = {
   name: PropTypes.string.isRequired,
   value: PropTypes.string.isRequired,
+  timerValue: PropTypes.shape({
+    min: PropTypes.string.isRequired,
+    sec: PropTypes.string.isRequired,
+  }).isRequired,
   className: PropTypes.string,
   autoFocus: PropTypes.bool,
   placeholder: PropTypes.string,
   onInputChange: PropTypes.func.isRequired,
+  onTimerChange: PropTypes.func.isRequired,
   onTodoSubmit: PropTypes.func.isRequired,
 };
 

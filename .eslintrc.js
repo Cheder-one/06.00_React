@@ -30,14 +30,18 @@ module.exports = {
 
   // 0 - off 1 - warn 2 - error
   rules: {
-    indent: ['warn', 2],
+    indent: ['off', 2],
     'prettier/prettier': 'warn',
     'linebreak-style': ['warn', 'unix'],
     quotes: ['error', 'single', { allowTemplateLiterals: true }],
     semi: ['warn', 'always'],
     'react/prop-types': 'warn',
     'react/react-in-jsx-scope': 'off',
-    'react-refresh/only-export-components': 'warn',
+    'react-refresh/only-export-components': [
+      'warn',
+      { allowConstantExport: true },
+    ],
+    'class-methods-use-this': 'warn',
     'react/prefer-stateless-function': 'error',
     'react/jsx-filename-extension': [
       'warn',

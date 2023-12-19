@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 import TaskInput from '../taskInput/TaskInput';
 import { getDuration } from '../../utils';
+import Timer from '../timer/Timer';
 
 class Task extends Component {
   constructor(props) {
@@ -11,7 +12,8 @@ class Task extends Component {
     this.state = {
       isEdit: false,
       editableId: '',
-      newTodoValue: props.value,
+      newTodo: props.value,
+      newTodoTimer: props.timer,
       duration: getDuration(props.created),
     };
   }
@@ -44,24 +46,26 @@ class Task extends Component {
     this.setState((prev) => ({ ...prev, editableId }));
   };
 
-  handleInputChange = ({ name, value }) => {
-    if (value)
-      this.setState((prev) => ({
-        ...prev,
-        [name]: value,
-      }));
+  handleInputChange = (cb) => {
+    this.setState(cb);
+  };
+
+  handleTimerChange = (cb) => {
+    this.setState(cb);
   };
 
   handleEditedTodoSubmit = () => {
     const { onTodoEditSubmit } = this.props;
-    const { editableId, newTodoValue } = this.state;
+    const { editableId, newTodo, newTodoTimer } = this.state;
 
-    const newTodo = {
+    const todo = {
       id: editableId,
-      value: newTodoValue,
+      value: newTodo,
+      timer: newTodoTimer,
     };
+    console.log(todo);
 
-    onTodoEditSubmit({ newTodo });
+    onTodoEditSubmit({ newTodo: todo });
     this.toggleTodoEdit();
   };
 
@@ -81,7 +85,7 @@ class Task extends Component {
 
   render() {
     const { id, ...props } = this.props;
-    const { isEdit, newTodoValue, duration } = this.state;
+    const { isEdit, duration, newTodo, newTodoTimer } = this.state;
 
     return (
       <li id={id} className={this.calcClassName()}>
@@ -94,14 +98,13 @@ class Task extends Component {
             onChange={() => this.handleCheckboxChange(id)}
           />
           <label htmlFor={`_${id}`}>
-            <span
-              // type="button"
-              className="description"
-              // onClick={() => this.handleTodoEdit(id)}
-            >
-              {props.value}
+            <span className="title">{props.value}</span>
+            <span className="description">
+              <button type="button" className="icon icon-play" />
+              <button type="button" className="icon icon-pause" />
+              <Timer value={props.timer} />
             </span>
-            <span className="created">{duration}</span>
+            <span className="description">{duration}</span>
           </label>
           <button
             type="button"
@@ -116,12 +119,14 @@ class Task extends Component {
         </div>
         {isEdit && (
           <TaskInput
-            name="newTodoValue"
-            value={newTodoValue}
-            autoFocus
+            name="newTodo"
+            value={newTodo}
+            timerValue={newTodoTimer}
             className="edit"
             placeholder=""
+            autoFocus
             onInputChange={this.handleInputChange}
+            onTimerChange={this.handleTimerChange}
             onTodoSubmit={this.handleEditedTodoSubmit}
           />
         )}

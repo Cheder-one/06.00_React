@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 
 import TasksFilter from '../../tasksFilter/TasksFilter';
-import './Footer.scss';
+// import './Footer.scss';
 
 function Footer({
   todos,

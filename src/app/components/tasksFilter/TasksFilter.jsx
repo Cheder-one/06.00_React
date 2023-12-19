@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 
-import './TasksFilter.scss';
+// import './TasksFilter.scss';
 
 function TasksFilter({ todoFilter, onFilterChange }) {
   const handleFilterChange = (event) => {

@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 
 import Task from '../task/Task';
-import './TaskList.scss';
+// import './TaskList.scss';
 
 function TaskList({
   todos,
@@ -17,7 +17,7 @@ function TaskList({
           : todo
       );
 
-      return { ...prev, todos: toggled };
+      return { todos: toggled };
     };
     onTodoToggle(toggleTodo);
   };
@@ -26,11 +26,15 @@ function TaskList({
     const editTodo = (prev) => {
       const edited = prev.todos.map((todo) =>
         todo.id === newTodo.id
-          ? { ...todo, value: newTodo.value }
+          ? {
+              ...todo,
+              value: newTodo.value,
+              timer: newTodo.timer,
+            }
           : todo
       );
 
-      return { ...prev, todos: edited };
+      return { todos: edited };
     };
     onTodoEditSubmit(editTodo);
   };
@@ -38,7 +42,8 @@ function TaskList({
   const handleTodoDelete = (itemId) => {
     const filterTodos = (prev) => {
       const filtered = prev.todos.filter(({ id }) => id !== itemId);
-      return { ...prev, todos: filtered };
+
+      return { todos: filtered };
     };
     onTodoDelete(filterTodos);
   };
@@ -50,6 +55,7 @@ function TaskList({
           id={todo.id}
           key={todo.id}
           value={todo.value}
+          timer={todo.timer}
           created={todo.created}
           isCompleted={todo.completed}
           onTodoToggle={handleTodoToggle}
