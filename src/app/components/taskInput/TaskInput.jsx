@@ -1,10 +1,9 @@
 /* eslint-disable no-restricted-globals */
 /* eslint-disable jsx-a11y/no-autofocus */
-
+// import './TaskInput.scss';
 import PropTypes from 'prop-types';
 
 import { formatTimer, generateId } from '../../utils';
-// import './TaskInput.scss';
 
 function TaskInput({
   name,
@@ -38,7 +37,7 @@ function TaskInput({
     return {
       id: generateId(),
       value: input,
-      timer: formatTimer({ ...timer }),
+      timerValue: formatTimer({ ...timer }),
       completed: false,
       created: new Date().toISOString(),
     };

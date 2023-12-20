@@ -31,6 +31,7 @@ module.exports = {
   // 0 - off 1 - warn 2 - error
   rules: {
     indent: ['off', 2],
+    'react/no-unused-class-component-methods': 'warn',
     'prettier/prettier': 'warn',
     'linebreak-style': ['warn', 'unix'],
     quotes: ['error', 'single', { allowTemplateLiterals: true }],

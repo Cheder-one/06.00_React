@@ -29,7 +29,7 @@ function TaskList({
           ? {
               ...todo,
               value: newTodo.value,
-              timer: newTodo.timer,
+              timerValue: newTodo.timerValue,
             }
           : todo
       );
@@ -55,7 +55,7 @@ function TaskList({
           id={todo.id}
           key={todo.id}
           value={todo.value}
-          timer={todo.timer}
+          timerValue={todo.timerValue}
           created={todo.created}
           isCompleted={todo.completed}
           onTodoToggle={handleTodoToggle}
@@ -72,6 +72,10 @@ TaskList.propTypes = {
     PropTypes.shape({
       id: PropTypes.string.isRequired,
       value: PropTypes.string.isRequired,
+      timerValue: PropTypes.shape({
+        min: PropTypes.string.isRequired,
+        sec: PropTypes.string.isRequired,
+      }).isRequired,
       created: PropTypes.string.isRequired,
       completed: PropTypes.bool.isRequired,
     })

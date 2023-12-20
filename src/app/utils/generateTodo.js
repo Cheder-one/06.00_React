@@ -12,7 +12,7 @@ const generateTodo = () => {
   return [1, 2, 3].map((i) => ({
     id: generateId(),
     value: `Новая задача ${i}`,
-    timer: generateTime(),
+    timerValue: generateTime(),
     completed: Boolean(i % 2),
     created: new Date().toISOString(),
   }));

@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import { Component, createRef } from 'react';
 import PropTypes from 'prop-types';
 
 import TaskInput from '../taskInput/TaskInput';
@@ -13,9 +13,11 @@ class Task extends Component {
       isEdit: false,
       editableId: '',
       newTodo: props.value,
-      newTodoTimer: props.timer,
+      newTodoTimer: props.timerValue,
       duration: getDuration(props.created),
     };
+
+    this.timerRef = createRef();
   }
 
   componentDidMount() {
@@ -29,11 +31,12 @@ class Task extends Component {
   }
 
   componentDidUpdate(pvp) {
-    const { value, timer } = this.props;
-    if (pvp.value !== value || pvp.timer !== timer) {
+    const { value, timerValue } = this.props;
+
+    if (pvp.value !== value || pvp.timerValue !== timerValue) {
       this.setState({
         newTodo: value,
-        newTodoTimer: timer,
+        newTodoTimer: timerValue,
       });
     }
   }
@@ -72,7 +75,7 @@ class Task extends Component {
     const todo = {
       id: editableId,
       value: newTodo,
-      timer: formatTimer({ min, sec }),
+      timerValue: formatTimer({ min, sec }),
     };
 
     onTodoEditSubmit({ newTodo: todo });
@@ -82,6 +85,16 @@ class Task extends Component {
   handleTodoDelete = (id) => {
     const { onTodoDelete } = this.props;
     onTodoDelete(id);
+  };
+
+  toggleTodoTimer = ({ target }) => {
+    const { name } = target;
+    if (name === 'start') {
+      this.timerRef.current.startTimer();
+    }
+    if (name === 'pause') {
+      this.timerRef.current.pauseTimer();
+    }
   };
 
   calcClassName() {
@@ -110,9 +123,23 @@ class Task extends Component {
           <label htmlFor={`_${id}`}>
             <span className="title">{props.value}</span>
             <span className="description">
-              <button type="button" className="icon icon-play" />
-              <button type="button" className="icon icon-pause" />
-              <Timer value={props.timer} />
+              <button
+                name="start"
+                type="button"
+                className="icon icon-play"
+                onClick={this.toggleTodoTimer}
+              />
+              <button
+                name="pause"
+                type="button"
+                className="icon icon-pause"
+                onClick={this.toggleTodoTimer}
+              />
+              <Timer
+                ref={this.timerRef}
+                timerValue={props.timerValue}
+                isCompleted={props.isCompleted}
+              />
             </span>
             <span className="description">{duration}</span>
           </label>
@@ -148,7 +175,7 @@ class Task extends Component {
 Task.propTypes = {
   id: PropTypes.string.isRequired,
   value: PropTypes.string.isRequired,
-  timer: PropTypes.shape({
+  timerValue: PropTypes.shape({
     min: PropTypes.string.isRequired,
     sec: PropTypes.string.isRequired,
   }).isRequired,
