@@ -36,6 +36,10 @@ class App extends Component {
     this.setState(callback);
   };
 
+  handleTimerToggle = (callback) => {
+    this.setState(callback);
+  };
+
   handleTodoEditSubmit = (callback) => {
     this.setState(callback);
   };
@@ -66,9 +70,9 @@ class App extends Component {
     if (state.todoFilter === 'all') {
       filteredTodos = state.todos;
     } else if (state.todoFilter === 'active') {
-      filteredTodos = state.todos.filter((todo) => !todo.completed);
+      filteredTodos = state.todos.filter((todo) => !todo.isCompleted);
     } else {
-      filteredTodos = state.todos.filter((todo) => todo.completed);
+      filteredTodos = state.todos.filter((todo) => todo.isCompleted);
     }
 
     return (
@@ -84,6 +88,7 @@ class App extends Component {
         <TaskList
           todos={filteredTodos}
           onTodoToggle={this.handleTodoToggle}
+          onTimerToggle={this.handleTimerToggle}
           onTodoEditSubmit={this.handleTodoEditSubmit}
           onTodoDelete={this.handleTodoDelete}
         />

@@ -3,27 +3,36 @@ import PropTypes from 'prop-types';
 import Task from '../task/Task';
 // import './TaskList.scss';
 
+// TASK Запоминать время таймера в момент Unmount
+// TASK Записывать таймстамп в момент Unmount
+// TASK При Mount восстанавливаем сессию времени таймера
+// TASK Date.now() - таймстамп
+// TASK Восстановленный таймер - timestampDiff
+
 function TaskList({
   todos,
   onTodoToggle,
+  onTimerToggle,
   onTodoEditSubmit,
   onTodoDelete,
 }) {
+  console.table(todos);
+
   const handleTodoToggle = (itemId) => {
-    const toggleTodo = (prev) => {
+    const toggledTodo = (prev) => {
       const toggled = prev.todos.map((todo) =>
         todo.id === itemId
-          ? { ...todo, completed: !todo.completed }
+          ? { ...todo, isCompleted: !todo.isCompleted }
           : todo
       );
 
       return { todos: toggled };
     };
-    onTodoToggle(toggleTodo);
+    onTodoToggle(toggledTodo);
   };
 
   const handleTodoEditSubmit = ({ newTodo }) => {
-    const editTodo = (prev) => {
+    const editedTodo = (prev) => {
       const edited = prev.todos.map((todo) =>
         todo.id === newTodo.id
           ? {
@@ -36,16 +45,30 @@ function TaskList({
 
       return { todos: edited };
     };
-    onTodoEditSubmit(editTodo);
+    onTodoEditSubmit(editedTodo);
   };
 
   const handleTodoDelete = (itemId) => {
-    const filterTodos = (prev) => {
+    const filteredTodos = (prev) => {
       const filtered = prev.todos.filter(({ id }) => id !== itemId);
 
       return { todos: filtered };
     };
-    onTodoDelete(filterTodos);
+    onTodoDelete(filteredTodos);
+  };
+
+  const toggleTodoTimer = (itemId, fieldName, status) => {
+    const toggledTimer = (prev) => {
+      const toggled = prev.todos.map((todo) =>
+        // prettier-ignore
+        todo.id === itemId
+          ? { ...todo, [fieldName]: status }
+          : todo
+      );
+
+      return { todos: toggled };
+    };
+    onTimerToggle(toggledTimer);
   };
 
   return (
@@ -57,8 +80,11 @@ function TaskList({
           value={todo.value}
           timerValue={todo.timerValue}
           created={todo.created}
-          isCompleted={todo.completed}
+          isRunning={todo.isRunning}
+          isBlocked={todo.isBlocked}
+          isCompleted={todo.isCompleted}
           onTodoToggle={handleTodoToggle}
+          onTimerToggle={toggleTodoTimer}
           onTodoEditSubmit={handleTodoEditSubmit}
           onTodoDelete={handleTodoDelete}
         />
@@ -77,7 +103,7 @@ TaskList.propTypes = {
         sec: PropTypes.string.isRequired,
       }).isRequired,
       created: PropTypes.string.isRequired,
-      completed: PropTypes.bool.isRequired,
+      isCompleted: PropTypes.bool.isRequired,
     })
   ).isRequired,
   onTodoToggle: PropTypes.func.isRequired,

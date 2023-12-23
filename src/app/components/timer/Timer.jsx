@@ -13,27 +13,31 @@ class Timer extends Component {
 
     this.state = {
       time: props.timerValue,
-      isRunning: false,
-      isBlocked: false,
+      // isRunning: false,
+      // isBlocked: false,
     };
-
-    this.startTime = null;
   }
 
   componentDidMount() {
-    const { id, timerValue } = this.props;
+    const { id, timerValue, isCompleted, isRunning } = this.props;
+    const { min, sec } = timerValue;
 
-    if (getLocalStorage(id)) {
-      this.handleLocalStorage(id, this.startTime, timerValue);
-    } else {
-      saveLocalStorage(id, this.startTime);
-    }
-
-    const { isCompleted } = this.props;
-    if (!isCompleted) {
-      this.startTimer();
+    if (isRunning && !isCompleted) {
+      this.startTimer('skip');
     } else {
       this.pauseTimer();
+    }
+
+    if (!getLocalStorage(id)) {
+      saveLocalStorage(id, new Date());
+    } else {
+      const initTime = getLocalStorage(id);
+      const diff =
+        new Date().getTime() - new Date(initTime).getTime();
+      const secDiff = Math.floor(diff / 1000);
+
+      const timerTime = formatTimer({ min, sec: sec - secDiff });
+      this.setState({ time: timerTime });
     }
   }
 
@@ -44,23 +48,13 @@ class Timer extends Component {
   }
 
   componentWillUnmount() {
-    clearInterval(this.startTm);
-  }
-
-  handleLocalStorage(...args) {
-    const [id, startTime, { min, sec }] = args;
-
-    const time = getLocalStorage(id);
-    const diff = startTime.getTime() - new Date(time).getTime();
-    const secDiff = Math.floor(diff / 1000);
-
-    const timerTime = formatTimer({ min, sec: sec - secDiff });
-    this.setState({ time: timerTime });
+    clearInterval(this.timer);
   }
 
   handleTimeExpiry(pvs) {
-    const { time } = this.state;
-    const { min, sec } = time;
+    const { id, onTimerToggle } = this.props;
+    // prettier-ignore
+    const { time : { min, sec } } = this.state;
     const prevMin = pvs.time.min;
     const prevSec = pvs.time.sec;
 
@@ -69,26 +63,31 @@ class Timer extends Component {
 
     if (totalTime <= 0 && totalTime !== prevTotalTime) {
       this.pauseTimer();
+
+      onTimerToggle(id, 'isBlocked', true);
       this.setState({
-        isBlocked: true,
+        // isBlocked: true,
         time: { min: '00', sec: '00' },
       });
     }
   }
 
   handleTimerUpdate(pvp) {
-    const { timerValue, isCompleted } = this.props;
+    const { id, timerValue, isCompleted, onTimerToggle } = this.props;
 
     if (pvp.timerValue !== timerValue) {
       this.setState(
         {
           time: timerValue,
-          isRunning: false,
-          isBlocked: false,
+          // isRunning: false,
+          // isBlocked: false,
         },
         () => !isCompleted && this.startTimer()
       );
-      clearInterval(this.startTm);
+      onTimerToggle(id, 'isRunning', false);
+      onTimerToggle(id, 'isBlocked', false);
+
+      clearInterval(this.timer);
     }
   }
 
@@ -104,15 +103,17 @@ class Timer extends Component {
     }
   };
 
-  startTimer = () => {
-    const { isRunning, isBlocked } = this.state;
-    this.startTime = new Date();
+  startTimer = (isSkip) => {
+    const { id, isRunning, isBlocked, onTimerToggle } = this.props;
 
-    if (isRunning || isBlocked) return;
-    this.setState({ isRunning: true });
-    clearInterval(this.pauseTm);
+    if (!isSkip) {
+      if (isRunning || isBlocked) return;
+      onTimerToggle(id, 'isRunning', true);
+    }
 
-    this.startTm = setInterval(() => {
+    // this.setState({ isRunning: true });
+
+    this.timer = setInterval(() => {
       this.updateTimer();
     }, 1000);
   };
@@ -125,8 +126,11 @@ class Timer extends Component {
   };
 
   pauseTimer = () => {
-    clearInterval(this.startTm);
-    this.setState({ isRunning: false });
+    const { id, onTimerToggle } = this.props;
+    clearInterval(this.timer);
+    onTimerToggle(id, 'isRunning', false);
+
+    // this.setState({ isRunning: false });
   };
 
   render() {
@@ -144,6 +148,9 @@ Timer.propTypes = {
     sec: PropTypes.string.isRequired,
   }).isRequired,
   isCompleted: PropTypes.bool.isRequired,
+  isRunning: PropTypes.bool.isRequired,
+  isBlocked: PropTypes.bool.isRequired,
+  onTimerToggle: PropTypes.func.isRequired,
 };
 
 export default Timer;

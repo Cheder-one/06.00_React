@@ -13,7 +13,9 @@ const generateTodo = () => {
     id: generateId(),
     value: `Новая задача ${i}`,
     timerValue: generateTime(),
-    completed: Boolean(i % 2),
+    isRunning: false,
+    isBlocked: false,
+    isCompleted: Boolean(i % 2),
     created: new Date().toISOString(),
   }));
 };

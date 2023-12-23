@@ -38,7 +38,7 @@ class Task extends Component {
     clearInterval(this.durationInterval);
   }
 
-  handleCheckboxChange = (id) => {
+  handleTodoComplete = (id) => {
     const { onTodoToggle } = this.props;
     onTodoToggle(id);
   };
@@ -121,7 +121,7 @@ class Task extends Component {
             className="toggle"
             type="checkbox"
             checked={props.isCompleted}
-            onChange={() => this.handleCheckboxChange(id)}
+            onChange={() => this.handleTodoComplete(id)}
           />
           <label htmlFor={`_${id}`}>
             <span className="title">{props.value}</span>
@@ -142,7 +142,10 @@ class Task extends Component {
                 id={id}
                 ref={this.timerRef}
                 timerValue={props.timerValue}
+                isRunning={props.isRunning}
+                isBlocked={props.isBlocked}
                 isCompleted={props.isCompleted}
+                onTimerToggle={props.onTimerToggle}
               />
             </span>
             <span className="description">{duration}</span>

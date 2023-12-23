@@ -17,7 +17,7 @@ function Footer({
   const handleClearCompletedClick = () => {
     const filterCompleted = (prev) => {
       const filtered = prev.todos.filter(
-        (todo) => todo.completed === false
+        (todo) => todo.isCompleted === false
       );
 
       return { ...prev, todos: filtered };
@@ -49,7 +49,7 @@ Footer.propTypes = {
     PropTypes.shape({
       id: PropTypes.string.isRequired,
       value: PropTypes.string.isRequired,
-      completed: PropTypes.bool.isRequired,
+      isCompleted: PropTypes.bool.isRequired,
     })
   ).isRequired,
   todoFilter: PropTypes.string.isRequired,

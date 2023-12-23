@@ -38,7 +38,9 @@ function TaskInput({
       id: generateId(),
       value: input,
       timerValue: formatTimer({ ...timer }),
-      completed: false,
+      isRunning: false,
+      isBlocked: false,
+      isCompleted: false,
       created: new Date().toISOString(),
     };
   };
