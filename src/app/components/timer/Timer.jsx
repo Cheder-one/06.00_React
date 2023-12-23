@@ -13,31 +13,32 @@ class Timer extends Component {
 
     this.state = {
       time: props.timerValue,
-      // isRunning: false,
-      // isBlocked: false,
     };
   }
 
   componentDidMount() {
-    const { id, timerValue, isCompleted, isRunning } = this.props;
-    const { min, sec } = timerValue;
+    const { id, isCompleted, isRunning } = this.props;
+    const prevTimerTime = getLocalStorage(`timerValue_${id}`);
+
+    if (prevTimerTime) {
+      const { min, sec } = prevTimerTime;
+
+      if (isRunning) {
+        const stamp = getLocalStorage(`timestamp_${id}`);
+        const diff = Date.now() - stamp;
+        const secDiff = Math.floor(diff / 1000);
+        const value = formatTimer({ min, sec: sec - secDiff });
+
+        this.setState({ time: value });
+      } else {
+        this.setState({ time: formatTimer({ min, sec }) });
+      }
+    }
 
     if (isRunning && !isCompleted) {
       this.startTimer('skip');
     } else {
       this.pauseTimer();
-    }
-
-    if (!getLocalStorage(id)) {
-      saveLocalStorage(id, new Date());
-    } else {
-      const initTime = getLocalStorage(id);
-      const diff =
-        new Date().getTime() - new Date(initTime).getTime();
-      const secDiff = Math.floor(diff / 1000);
-
-      const timerTime = formatTimer({ min, sec: sec - secDiff });
-      this.setState({ time: timerTime });
     }
   }
 
@@ -48,13 +49,18 @@ class Timer extends Component {
   }
 
   componentWillUnmount() {
+    const { id } = this.props;
+    const { time } = this.state;
+
     clearInterval(this.timer);
+    saveLocalStorage(`timerValue_${id}`, time);
+    saveLocalStorage(`timestamp_${id}`, Date.now());
   }
 
   handleTimeExpiry(pvs) {
     const { id, onTimerToggle } = this.props;
     // prettier-ignore
-    const { time : { min, sec } } = this.state;
+    const { time: { min, sec } } = this.state;
     const prevMin = pvs.time.min;
     const prevSec = pvs.time.sec;
 
@@ -65,10 +71,7 @@ class Timer extends Component {
       this.pauseTimer();
 
       onTimerToggle(id, 'isBlocked', true);
-      this.setState({
-        // isBlocked: true,
-        time: { min: '00', sec: '00' },
-      });
+      this.setState({ time: { min: '00', sec: '00' } });
     }
   }
 
@@ -76,18 +79,14 @@ class Timer extends Component {
     const { id, timerValue, isCompleted, onTimerToggle } = this.props;
 
     if (pvp.timerValue !== timerValue) {
-      this.setState(
-        {
-          time: timerValue,
-          // isRunning: false,
-          // isBlocked: false,
-        },
-        () => !isCompleted && this.startTimer()
-      );
+      this.setState({ time: timerValue });
       onTimerToggle(id, 'isRunning', false);
       onTimerToggle(id, 'isBlocked', false);
 
       clearInterval(this.timer);
+      if (!isCompleted) {
+        this.startTimer();
+      }
     }
   }
 
@@ -111,8 +110,6 @@ class Timer extends Component {
       onTimerToggle(id, 'isRunning', true);
     }
 
-    // this.setState({ isRunning: true });
-
     this.timer = setInterval(() => {
       this.updateTimer();
     }, 1000);
@@ -129,8 +126,6 @@ class Timer extends Component {
     const { id, onTimerToggle } = this.props;
     clearInterval(this.timer);
     onTimerToggle(id, 'isRunning', false);
-
-    // this.setState({ isRunning: false });
   };
 
   render() {

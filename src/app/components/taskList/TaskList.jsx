@@ -5,8 +5,8 @@ import Task from '../task/Task';
 
 // TASK Запоминать время таймера в момент Unmount
 // TASK Записывать таймстамп в момент Unmount
-// TASK При Mount восстанавливаем сессию времени таймера
-// TASK Date.now() - таймстамп
+// TASK При Mount восстанавливаем сессию времени таймера и таймстамп
+// TASK timestampDiff = Date.now() - таймстамп
 // TASK Восстановленный таймер - timestampDiff
 
 function TaskList({
@@ -16,8 +16,6 @@ function TaskList({
   onTodoEditSubmit,
   onTodoDelete,
 }) {
-  console.table(todos);
-
   const handleTodoToggle = (itemId) => {
     const toggledTodo = (prev) => {
       const toggled = prev.todos.map((todo) =>
