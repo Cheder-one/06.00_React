@@ -1,8 +1,11 @@
-/* eslint-disable react/no-unused-class-component-methods */
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import { formatTimer } from '../../utils';
+import {
+  formatTimer,
+  getLocalStorage,
+  saveLocalStorage,
+} from '../../utils';
 
 class Timer extends Component {
   constructor(props) {
@@ -13,12 +16,24 @@ class Timer extends Component {
       isRunning: false,
       isBlocked: false,
     };
+
+    this.startTime = null;
   }
 
   componentDidMount() {
+    const { id, timerValue } = this.props;
+
+    if (getLocalStorage(id)) {
+      this.handleLocalStorage(id, this.startTime, timerValue);
+    } else {
+      saveLocalStorage(id, this.startTime);
+    }
+
     const { isCompleted } = this.props;
     if (!isCompleted) {
       this.startTimer();
+    } else {
+      this.pauseTimer();
     }
   }
 
@@ -29,7 +44,18 @@ class Timer extends Component {
   }
 
   componentWillUnmount() {
-    clearInterval(this.timer);
+    clearInterval(this.startTm);
+  }
+
+  handleLocalStorage(...args) {
+    const [id, startTime, { min, sec }] = args;
+
+    const time = getLocalStorage(id);
+    const diff = startTime.getTime() - new Date(time).getTime();
+    const secDiff = Math.floor(diff / 1000);
+
+    const timerTime = formatTimer({ min, sec: sec - secDiff });
+    this.setState({ time: timerTime });
   }
 
   handleTimeExpiry(pvs) {
@@ -54,15 +80,15 @@ class Timer extends Component {
     const { timerValue, isCompleted } = this.props;
 
     if (pvp.timerValue !== timerValue) {
-      const callback = () => !isCompleted && this.startTimer();
       this.setState(
         {
           time: timerValue,
           isRunning: false,
           isBlocked: false,
         },
-        callback
+        () => !isCompleted && this.startTimer()
       );
+      clearInterval(this.startTm);
     }
   }
 
@@ -80,26 +106,27 @@ class Timer extends Component {
 
   startTimer = () => {
     const { isRunning, isBlocked } = this.state;
+    this.startTime = new Date();
 
     if (isRunning || isBlocked) return;
     this.setState({ isRunning: true });
+    clearInterval(this.pauseTm);
 
-    this.timer = setInterval(() => {
+    this.startTm = setInterval(() => {
       this.updateTimer();
     }, 1000);
   };
 
-  pauseTimer = () => {
-    clearInterval(this.timer);
-    this.setState({ isRunning: false });
-  };
-
   updateTimer = () => {
-    this.setState((prev) => {
-      const { time } = prev;
+    this.setState(({ time }) => {
       const { min, sec } = time;
       return { time: formatTimer({ min, sec: sec - 1 }) };
     });
+  };
+
+  pauseTimer = () => {
+    clearInterval(this.startTm);
+    this.setState({ isRunning: false });
   };
 
   render() {
@@ -111,6 +138,7 @@ class Timer extends Component {
 }
 
 Timer.propTypes = {
+  id: PropTypes.string.isRequired,
   timerValue: PropTypes.shape({
     min: PropTypes.string.isRequired,
     sec: PropTypes.string.isRequired,

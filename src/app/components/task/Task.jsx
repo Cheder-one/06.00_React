@@ -1,9 +1,9 @@
 import { Component, createRef } from 'react';
 import PropTypes from 'prop-types';
 
+import Timer from '../timer/Timer';
 import TaskInput from '../taskInput/TaskInput';
 import { formatTimer, getDuration } from '../../utils';
-import Timer from '../timer/Timer';
 
 class Task extends Component {
   constructor(props) {
@@ -16,18 +16,11 @@ class Task extends Component {
       newTodoTimer: props.timerValue,
       duration: getDuration(props.created),
     };
-
     this.timerRef = createRef();
   }
 
   componentDidMount() {
-    this.durationInterval = setInterval(() => {
-      const { created } = this.props;
-
-      this.setState({
-        duration: getDuration(created),
-      });
-    }, 5000);
+    this.startDurationInterval();
   }
 
   componentDidUpdate(pvp) {
@@ -50,6 +43,7 @@ class Task extends Component {
     onTodoToggle(id);
   };
 
+  // eslint-disable-next-line react/sort-comp
   toggleTodoEdit = () => {
     this.setState((prev) => ({ isEdit: !prev.isEdit }));
   };
@@ -97,6 +91,15 @@ class Task extends Component {
     }
   };
 
+  startDurationInterval() {
+    this.durationInterval = setInterval(() => {
+      const { created } = this.props;
+      this.setState({
+        duration: getDuration(created),
+      });
+    }, 5000);
+  }
+
   calcClassName() {
     const { isCompleted } = this.props;
     const { isEdit } = this.state;
@@ -136,6 +139,7 @@ class Task extends Component {
                 onClick={this.toggleTodoTimer}
               />
               <Timer
+                id={id}
                 ref={this.timerRef}
                 timerValue={props.timerValue}
                 isCompleted={props.isCompleted}

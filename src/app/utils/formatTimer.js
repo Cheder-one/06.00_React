@@ -1,4 +1,4 @@
-const formatTimer = ({ min, sec }) => {
+const formatTimer = ({ min = 0, sec = 0 }) => {
   const totalSec = Number(min) * 60 + Number(sec);
 
   const mm = Math.floor(totalSec / 60)
