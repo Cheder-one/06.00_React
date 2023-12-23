@@ -3,12 +3,6 @@ import PropTypes from 'prop-types';
 import Task from '../task/Task';
 // import './TaskList.scss';
 
-// TASK Запоминать время таймера в момент Unmount
-// TASK Записывать таймстамп в момент Unmount
-// TASK При Mount восстанавливаем сессию времени таймера и таймстамп
-// TASK timestampDiff = Date.now() - таймстамп
-// TASK Восстановленный таймер - timestampDiff
-
 function TaskList({
   todos,
   onTodoToggle,
@@ -105,6 +99,7 @@ TaskList.propTypes = {
     })
   ).isRequired,
   onTodoToggle: PropTypes.func.isRequired,
+  onTimerToggle: PropTypes.func.isRequired,
   onTodoEditSubmit: PropTypes.func.isRequired,
   onTodoDelete: PropTypes.func.isRequired,
 };
