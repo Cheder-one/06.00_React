@@ -12,7 +12,7 @@ class Task extends Component {
     this.state = {
       isEdit: false,
       editableId: '',
-      newTodo: props.value,
+      newValue: props.value,
       newTodoTimer: props.timerValue,
       duration: getDuration(props.created),
     };
@@ -28,7 +28,7 @@ class Task extends Component {
 
     if (pvp.value !== value || pvp.timerValue !== timerValue) {
       this.setState({
-        newTodo: value,
+        newValue: value,
         newTodoTimer: timerValue,
       });
     }
@@ -38,12 +38,21 @@ class Task extends Component {
     clearInterval(this.durationInterval);
   }
 
-  handleTodoComplete = (id) => {
+  handleTodoToggleComplete = (itemId) => {
     const { onTodoToggle } = this.props;
-    onTodoToggle(id);
+
+    const toggleTodo = (prev) => {
+      const toggled = prev.todos.map((todo) =>
+        todo.id === itemId
+          ? { ...todo, isCompleted: !todo.isCompleted }
+          : todo
+      );
+
+      return { todos: toggled };
+    };
+    onTodoToggle(toggleTodo);
   };
 
-  // eslint-disable-next-line react/sort-comp
   toggleTodoEdit = () => {
     this.setState((prev) => ({ isEdit: !prev.isEdit }));
   };
@@ -62,23 +71,47 @@ class Task extends Component {
   };
 
   handleEditedTodoSubmit = () => {
-    const { editableId, newTodo, newTodoTimer } = this.state;
-    const { onTodoEditSubmit } = this.props;
+    const { editableId, newValue, newTodoTimer } = this.state;
     const { min, sec } = newTodoTimer;
 
     const todo = {
       id: editableId,
-      value: newTodo,
+      value: newValue,
       timerValue: formatTimer({ min, sec }),
     };
 
-    onTodoEditSubmit({ newTodo: todo });
+    this.updateTodo(todo);
     this.toggleTodoEdit();
   };
 
-  handleTodoDelete = (id) => {
+  updateTodo = (newTodo) => {
+    const { onTodoEditSubmit } = this.props;
+
+    const editTodo = (prev) => {
+      const edited = prev.todos.map((todo) =>
+        todo.id === newTodo.id
+          ? {
+              ...todo,
+              value: newTodo.value,
+              timerValue: newTodo.timerValue,
+            }
+          : todo
+      );
+
+      return { todos: edited };
+    };
+    onTodoEditSubmit(editTodo);
+  };
+
+  handleTodoDelete = (itemId) => {
     const { onTodoDelete } = this.props;
-    onTodoDelete(id);
+
+    const filterTodos = (prev) => {
+      const filtered = prev.todos.filter(({ id }) => id !== itemId);
+
+      return { todos: filtered };
+    };
+    onTodoDelete(filterTodos);
   };
 
   toggleTodoTimer = ({ target }) => {
@@ -111,7 +144,7 @@ class Task extends Component {
 
   render() {
     const { id, ...props } = this.props;
-    const { isEdit, duration, newTodo, newTodoTimer } = this.state;
+    const { isEdit, duration, newValue, newTodoTimer } = this.state;
 
     return (
       <li id={id} className={this.calcClassName()}>
@@ -121,7 +154,7 @@ class Task extends Component {
             className="toggle"
             type="checkbox"
             checked={props.isCompleted}
-            onChange={() => this.handleTodoComplete(id)}
+            onChange={() => this.handleTodoToggleComplete(id)}
           />
           <label htmlFor={`_${id}`}>
             <span className="title">{props.value}</span>
@@ -164,7 +197,7 @@ class Task extends Component {
         {isEdit && (
           <TaskInput
             name="newTodo"
-            value={newTodo}
+            value={newValue}
             timerValue={newTodoTimer}
             className="edit"
             placeholder=""

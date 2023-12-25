@@ -10,19 +10,6 @@ function Header({
   onTimerChange,
   onTodoSubmit,
 }) {
-  // const handleInputChange = ({ name, value }) => {
-  //   onInputChange({ [name]: value });
-  // };
-
-  // const handleTimerChange = ({ name, value }) => {
-  // onTimerChange((prev) => ({
-  // [name]: {
-  // ...prev[name],
-  // [name]: value[name],
-  // },
-  // }));
-  // };
-
   return (
     <header className="header">
       {title && <h1>{title}</h1>}

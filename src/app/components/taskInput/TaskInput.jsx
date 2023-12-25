@@ -1,6 +1,5 @@
 /* eslint-disable no-restricted-globals */
 /* eslint-disable jsx-a11y/no-autofocus */
-// import './TaskInput.scss';
 import PropTypes from 'prop-types';
 
 import { formatTimer, generateId } from '../../utils';
@@ -66,7 +65,6 @@ function TaskInput({
         className={className || 'new-todo'}
         placeholder={placeholder}
         onChange={handleInputChange}
-        // onKeyDown={handleSubmit}
       />
       <input
         name="min"

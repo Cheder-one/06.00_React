@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
 
 import Task from '../task/Task';
-// import './TaskList.scss';
 
 function TaskList({
   todos,
@@ -10,59 +9,6 @@ function TaskList({
   onTodoEditSubmit,
   onTodoDelete,
 }) {
-  const handleTodoToggle = (itemId) => {
-    const toggledTodo = (prev) => {
-      const toggled = prev.todos.map((todo) =>
-        todo.id === itemId
-          ? { ...todo, isCompleted: !todo.isCompleted }
-          : todo
-      );
-
-      return { todos: toggled };
-    };
-    onTodoToggle(toggledTodo);
-  };
-
-  const handleTodoEditSubmit = ({ newTodo }) => {
-    const editedTodo = (prev) => {
-      const edited = prev.todos.map((todo) =>
-        todo.id === newTodo.id
-          ? {
-              ...todo,
-              value: newTodo.value,
-              timerValue: newTodo.timerValue,
-            }
-          : todo
-      );
-
-      return { todos: edited };
-    };
-    onTodoEditSubmit(editedTodo);
-  };
-
-  const handleTodoDelete = (itemId) => {
-    const filteredTodos = (prev) => {
-      const filtered = prev.todos.filter(({ id }) => id !== itemId);
-
-      return { todos: filtered };
-    };
-    onTodoDelete(filteredTodos);
-  };
-
-  const toggleTodoTimer = (itemId, fieldName, status) => {
-    const toggledTimer = (prev) => {
-      const toggled = prev.todos.map((todo) =>
-        // prettier-ignore
-        todo.id === itemId
-          ? { ...todo, [fieldName]: status }
-          : todo
-      );
-
-      return { todos: toggled };
-    };
-    onTimerToggle(toggledTimer);
-  };
-
   return (
     <ul className="todo-list">
       {todos.map((todo) => (
@@ -75,10 +21,10 @@ function TaskList({
           isRunning={todo.isRunning}
           isBlocked={todo.isBlocked}
           isCompleted={todo.isCompleted}
-          onTodoToggle={handleTodoToggle}
-          onTimerToggle={toggleTodoTimer}
-          onTodoEditSubmit={handleTodoEditSubmit}
-          onTodoDelete={handleTodoDelete}
+          onTodoToggle={onTodoToggle}
+          onTimerToggle={onTimerToggle}
+          onTodoEditSubmit={onTodoEditSubmit}
+          onTodoDelete={onTodoDelete}
         />
       ))}
     </ul>

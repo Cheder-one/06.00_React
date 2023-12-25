@@ -1,9 +1,10 @@
 import { Component } from 'react';
 
-import TaskList from './app/components/taskList/TaskList';
-import Footer from './app/components/common/footer/Footer';
-import Header from './app/components/common/header/Header';
-import { generateTodo } from './app/utils';
+import { generateTodo } from '../utils';
+
+import TaskList from './taskList/TaskList';
+import Footer from './common/footer/Footer';
+import Header from './common/header/Header';
 
 class App extends Component {
   constructor(props) {

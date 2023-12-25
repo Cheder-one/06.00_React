@@ -58,7 +58,7 @@ class Timer extends Component {
   }
 
   handleTimeExpiry(pvs) {
-    const { id, onTimerToggle } = this.props;
+    const { id } = this.props;
     // prettier-ignore
     const { time: { min, sec } } = this.state;
     const prevMin = pvs.time.min;
@@ -70,18 +70,18 @@ class Timer extends Component {
     if (totalTime <= 0 && totalTime !== prevTotalTime) {
       this.pauseTimer();
 
-      onTimerToggle(id, 'isBlocked', true);
+      this.handleTimerToggle(id, 'isBlocked', true);
       this.setState({ time: { min: '00', sec: '00' } });
     }
   }
 
   handleTimerUpdate(pvp) {
-    const { id, timerValue, isCompleted, onTimerToggle } = this.props;
+    const { id, timerValue, isCompleted } = this.props;
 
     if (pvp.timerValue !== timerValue) {
       this.setState({ time: timerValue });
-      onTimerToggle(id, 'isRunning', false);
-      onTimerToggle(id, 'isBlocked', false);
+      this.handleTimerToggle(id, 'isRunning', false);
+      this.handleTimerToggle(id, 'isBlocked', false);
 
       clearInterval(this.timer);
       if (!isCompleted) {
@@ -102,12 +102,30 @@ class Timer extends Component {
     }
   };
 
+  handleTimerToggle = (itemId, fieldName, status) => {
+    const { onTimerToggle } = this.props;
+
+    const toggleTimer = (prev) => {
+      const toggled = prev.todos.map((todo) =>
+        // prettier-ignore
+        todo.id === itemId
+          ? { ...todo, [fieldName]: status }
+          : todo
+      );
+
+      return { todos: toggled };
+    };
+    onTimerToggle(toggleTimer);
+  };
+
   startTimer = (isSkip) => {
-    const { id, isRunning, isBlocked, onTimerToggle } = this.props;
+    const { id, isRunning, isBlocked, isCompleted } = this.props;
 
     if (!isSkip) {
-      if (isRunning || isBlocked) return;
-      onTimerToggle(id, 'isRunning', true);
+      if (isRunning || isBlocked || isCompleted) {
+        return;
+      }
+      this.handleTimerToggle(id, 'isRunning', true);
     }
 
     this.timer = setInterval(() => {
@@ -123,9 +141,9 @@ class Timer extends Component {
   };
 
   pauseTimer = () => {
-    const { id, onTimerToggle } = this.props;
+    const { id } = this.props;
     clearInterval(this.timer);
-    onTimerToggle(id, 'isRunning', false);
+    this.handleTimerToggle(id, 'isRunning', false);
   };
 
   render() {
