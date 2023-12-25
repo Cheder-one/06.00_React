@@ -12,7 +12,7 @@ class Task extends Component {
     this.state = {
       isEdit: false,
       editableId: '',
-      newValue: props.value,
+      newTodo: props.value,
       newTodoTimer: props.timerValue,
       duration: getDuration(props.created),
     };
@@ -28,7 +28,7 @@ class Task extends Component {
 
     if (pvp.value !== value || pvp.timerValue !== timerValue) {
       this.setState({
-        newValue: value,
+        newTodo: value,
         newTodoTimer: timerValue,
       });
     }
@@ -71,12 +71,12 @@ class Task extends Component {
   };
 
   handleEditedTodoSubmit = () => {
-    const { editableId, newValue, newTodoTimer } = this.state;
+    const { editableId, newTodo, newTodoTimer } = this.state;
     const { min, sec } = newTodoTimer;
 
     const todo = {
       id: editableId,
-      value: newValue,
+      value: newTodo,
       timerValue: formatTimer({ min, sec }),
     };
 
@@ -144,7 +144,7 @@ class Task extends Component {
 
   render() {
     const { id, ...props } = this.props;
-    const { isEdit, duration, newValue, newTodoTimer } = this.state;
+    const { isEdit, duration, newTodo, newTodoTimer } = this.state;
 
     return (
       <li id={id} className={this.calcClassName()}>
@@ -197,7 +197,7 @@ class Task extends Component {
         {isEdit && (
           <TaskInput
             name="newTodo"
-            value={newValue}
+            value={newTodo}
             timerValue={newTodoTimer}
             className="edit"
             placeholder=""
