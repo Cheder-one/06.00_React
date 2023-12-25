@@ -10,7 +10,7 @@ function TaskList({
   onTodoDelete,
 }) {
   const handleTodoToggle = (itemId) => {
-    const toggledTodo = (prevTodos) => {
+    const toggleTodo = (prevTodos) => {
       const toggled = prevTodos.map((todo) =>
         todo.id === itemId
           ? { ...todo, isCompleted: !todo.isCompleted }
@@ -19,11 +19,11 @@ function TaskList({
 
       return toggled;
     };
-    onTodoToggle(toggledTodo);
+    onTodoToggle(toggleTodo);
   };
 
   const handleTodoEditSubmit = (newTodo) => {
-    const editedTodo = (prevTodos) => {
+    const editTodo = (prevTodos) => {
       const edited = prevTodos.map((todo) =>
         todo.id === newTodo.id
           ? {
@@ -36,20 +36,20 @@ function TaskList({
 
       return edited;
     };
-    onTodoEditSubmit(editedTodo);
+    onTodoEditSubmit(editTodo);
   };
 
   const handleTodoDelete = (itemId) => {
-    const filteredTodos = (prevTodos) => {
+    const filterTodos = (prevTodos) => {
       const filtered = prevTodos.filter(({ id }) => id !== itemId);
 
       return filtered;
     };
-    onTodoDelete(filteredTodos);
+    onTodoDelete(filterTodos);
   };
 
-  const toggleTodoTimer = (itemId, fieldName, status) => {
-    const toggledTimer = (prevTodos) => {
+  const handleTodoTimerToggle = (itemId, fieldName, status) => {
+    const toggleTimer = (prevTodos) => {
       const toggled = prevTodos.map((todo) =>
         // prettier-ignore
         todo.id === itemId
@@ -59,7 +59,7 @@ function TaskList({
 
       return toggled;
     };
-    onTimerToggle(toggledTimer);
+    onTimerToggle(toggleTimer);
   };
 
   return (
@@ -75,7 +75,7 @@ function TaskList({
           isBlocked={todo.isBlocked}
           isCompleted={todo.isCompleted}
           onTodoToggle={handleTodoToggle}
-          onTimerToggle={toggleTodoTimer}
+          onTimerToggle={handleTodoTimerToggle}
           onTodoEditSubmit={handleTodoEditSubmit}
           onTodoDelete={handleTodoDelete}
         />
