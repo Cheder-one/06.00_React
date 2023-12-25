@@ -37,7 +37,11 @@ function Task({
   }
 
   useEffect(() => {
-    return startDurationInterval;
+    const clearTimer = startDurationInterval();
+
+    return () => {
+      clearTimer();
+    };
   }, []);
 
   useEffect(() => {
