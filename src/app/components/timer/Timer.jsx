@@ -113,7 +113,7 @@ class Timer extends Component {
           : todo
       );
 
-      return { todos: toggled };
+      return toggled;
     };
     onTimerToggle(toggleTimer);
   };
