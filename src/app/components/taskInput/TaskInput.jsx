@@ -1,6 +1,6 @@
 /* eslint-disable no-restricted-globals */
 /* eslint-disable jsx-a11y/no-autofocus */
-// import './TaskInput.scss';
+
 import PropTypes from 'prop-types';
 
 import { formatTimer, generateId } from '../../utils';
@@ -17,19 +17,15 @@ function TaskInput({
   onTodoSubmit,
 }) {
   const handleInputChange = ({ target }) => {
-    onInputChange({ [name]: target.value });
+    onInputChange(target.value);
   };
 
   const handleTimerChange = ({ target }) => {
-    const timer = `${name}Timer`;
-
     if (isNaN(target.value)) return;
 
     onTimerChange((prev) => ({
-      [timer]: {
-        ...prev[timer],
-        [target.name]: target.value,
-      },
+      ...prev,
+      [target.name]: target.value,
     }));
   };
 
@@ -46,15 +42,14 @@ function TaskInput({
   };
 
   const handleInputSubmit = (e) => {
-    const input = value.trim();
     e.preventDefault();
+    const input = value.trim();
 
     if (!input) return;
-
     const newTodo = createNewTodo(input, timerValue);
 
-    onInputChange({ name, value: '' });
-    onTodoSubmit({ newTodo });
+    onInputChange('');
+    onTodoSubmit(newTodo);
   };
 
   return (
@@ -66,7 +61,6 @@ function TaskInput({
         className={className || 'new-todo'}
         placeholder={placeholder}
         onChange={handleInputChange}
-        // onKeyDown={handleSubmit}
       />
       <input
         name="min"

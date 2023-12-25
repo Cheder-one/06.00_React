@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
 
 import Task from '../task/Task';
-// import './TaskList.scss';
 
 function TaskList({
   todos,
@@ -11,21 +10,21 @@ function TaskList({
   onTodoDelete,
 }) {
   const handleTodoToggle = (itemId) => {
-    const toggledTodo = (prev) => {
-      const toggled = prev.todos.map((todo) =>
+    const toggledTodo = (prevTodos) => {
+      const toggled = prevTodos.map((todo) =>
         todo.id === itemId
           ? { ...todo, isCompleted: !todo.isCompleted }
           : todo
       );
 
-      return { todos: toggled };
+      return toggled;
     };
     onTodoToggle(toggledTodo);
   };
 
-  const handleTodoEditSubmit = ({ newTodo }) => {
-    const editedTodo = (prev) => {
-      const edited = prev.todos.map((todo) =>
+  const handleTodoEditSubmit = (newTodo) => {
+    const editedTodo = (prevTodos) => {
+      const edited = prevTodos.map((todo) =>
         todo.id === newTodo.id
           ? {
               ...todo,
@@ -35,30 +34,30 @@ function TaskList({
           : todo
       );
 
-      return { todos: edited };
+      return edited;
     };
     onTodoEditSubmit(editedTodo);
   };
 
   const handleTodoDelete = (itemId) => {
-    const filteredTodos = (prev) => {
-      const filtered = prev.todos.filter(({ id }) => id !== itemId);
+    const filteredTodos = (prevTodos) => {
+      const filtered = prevTodos.filter(({ id }) => id !== itemId);
 
-      return { todos: filtered };
+      return filtered;
     };
     onTodoDelete(filteredTodos);
   };
 
   const toggleTodoTimer = (itemId, fieldName, status) => {
-    const toggledTimer = (prev) => {
-      const toggled = prev.todos.map((todo) =>
+    const toggledTimer = (prevTodos) => {
+      const toggled = prevTodos.map((todo) =>
         // prettier-ignore
         todo.id === itemId
           ? { ...todo, [fieldName]: status }
           : todo
       );
 
-      return { todos: toggled };
+      return toggled;
     };
     onTimerToggle(toggledTimer);
   };

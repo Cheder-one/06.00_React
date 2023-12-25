@@ -8,16 +8,18 @@ const generateTime = () => {
   return formatTimer({ min, sec });
 };
 
-const generateTodo = () => {
-  return [1, 2, 3].map((i) => ({
-    id: generateId(),
-    value: `Новая задача ${i}`,
-    timerValue: generateTime(),
-    isRunning: false,
-    isBlocked: false,
-    isCompleted: Boolean(i % 2),
-    created: new Date().toISOString(),
-  }));
+const generateTodo = (num = 3) => {
+  // prettier-ignore
+  return Array.from({ length: num }, (_, i) => i + 1)
+    .map((i) => ({
+      id: generateId(),
+      value: `Новая задача ${i}`,
+      timerValue: generateTime(),
+      isRunning: false,
+      isBlocked: false,
+      isCompleted: Boolean(i % 2),
+      created: new Date().toISOString(),
+    }));
 };
 
 export default generateTodo;

@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
 
 import TasksFilter from '../../tasksFilter/TasksFilter';
-// import './Footer.scss';
 
 function Footer({
   todos,
@@ -16,11 +15,11 @@ function Footer({
 
   const handleClearCompletedClick = () => {
     const filterCompleted = (prev) => {
-      const filtered = prev.todos.filter(
+      const filtered = prev.filter(
         (todo) => todo.isCompleted === false
       );
 
-      return { ...prev, todos: filtered };
+      return filtered;
     };
     onClearComplete(filterCompleted);
   };
@@ -29,8 +28,8 @@ function Footer({
     <footer className="footer">
       <span className="todo-count">{todoCount} items left</span>
       <TasksFilter
-        todoFilter={todoFilter}
         todos={todos}
+        todoFilter={todoFilter}
         onFilterChange={handleFilterChange}
       />
       <button
