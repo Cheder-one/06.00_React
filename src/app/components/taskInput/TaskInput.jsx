@@ -15,7 +15,7 @@ function TaskInput({
   className,
   autoFocus,
   onInputChange,
-  onToggleTodoEdit,
+  onTodoEditToggle,
   onTimerChange,
   onTimerToggle,
   onTodoSubmit,
@@ -61,7 +61,7 @@ function TaskInput({
     const { todo, timer } = initValue;
 
     if (key === 'Escape') {
-      onToggleTodoEdit();
+      onTodoEditToggle();
       onInputChange(todo);
       onTimerChange(timer);
       onTimerToggle(id, 'isRunning', true);
@@ -113,8 +113,16 @@ TaskInput.defaultProps = {
 };
 
 TaskInput.propTypes = {
+  id: PropTypes.string,
   name: PropTypes.string.isRequired,
   value: PropTypes.string.isRequired,
+  initValue: PropTypes.shape({
+    todo: PropTypes.string.isRequired,
+    timer: PropTypes.shape({
+      min: PropTypes.string.isRequired,
+      sec: PropTypes.string.isRequired,
+    }).isRequired,
+  }),
   timerValue: PropTypes.shape({
     min: PropTypes.string.isRequired,
     sec: PropTypes.string.isRequired,
@@ -123,8 +131,17 @@ TaskInput.propTypes = {
   autoFocus: PropTypes.bool,
   placeholder: PropTypes.string,
   onInputChange: PropTypes.func.isRequired,
+  onTodoEditToggle: PropTypes.func,
   onTimerChange: PropTypes.func.isRequired,
+  onTimerToggle: PropTypes.func,
   onTodoSubmit: PropTypes.func.isRequired,
+};
+
+TaskInput.defaultProps = {
+  id: null,
+  initValue: null,
+  onTimerToggle: null,
+  onTodoEditToggle: null,
 };
 
 export default TaskInput;

@@ -63,8 +63,14 @@ const Timer = forwardRef(
     };
 
     useEffect(() => {
+      if (isFirstRender) return;
+
       if (!isRunning || isBlocked) {
         pauseTimer();
+      }
+      if (isRunning && !isBlocked && !isCompleted) {
+        clearTimer();
+        startTimer(false);
       }
     }, [isRunning, isBlocked]);
 
@@ -150,125 +156,6 @@ const Timer = forwardRef(
 
 // TODO Исправить отрицательный таймер при нулевом создании времени TODO
 // TODO Исправить оставшиеся значения при отмене Edit TODO
-
-// class Timer extends Component {
-// constructor(props) {
-//   super(props);
-//   this.state = {
-//     time: props.timerValue,
-//   };
-// }
-// componentDidMount() {
-//   const { id, isCompleted, isRunning } = this.props;
-//   const prevTimerTime = getLocalStorage(`timerValue_${id}`);
-//   if (prevTimerTime) {
-//     const { min, sec } = prevTimerTime;
-//     if (isRunning) {
-//       const stamp = getLocalStorage(`timestamp_${id}`);
-//       const diff = Date.now() - stamp;
-//       const secDiff = Math.floor(diff / 1000);
-//       const value = formatTimer({ min, sec: sec - secDiff });
-//       this.setTime({ time: value });
-//     } else {
-//       this.setTime({ time: formatTimer({ min, sec }) });
-//     }
-//   }
-//   if (isRunning && !isCompleted) {
-//     this.startTimer('skip');
-//   } else {
-//     this.pauseTimer();
-//   }
-// }
-// componentDidUpdate(pvp, pvs) {
-//   this.handleTimeExpiry(pvs);
-//   this.handleTimerUpdate(pvp);
-//   this.handleTodoComplete(pvp, pvs);
-// }
-// componentWillUnmount() {
-//   const { id } = this.props;
-//   const { time } = this.state;
-//   clearInterval(this.timer);
-//   saveLocalStorage(`timerValue_${id}`, time);
-//   saveLocalStorage(`timestamp_${id}`, Date.now());
-// }
-// handleTimeExpiry(pvs) {
-// const { id } = this.props;
-// // prettier-ignore
-// const { time: { min, sec } } = this.state;
-// const prevMin = pvs.time.min;
-// const prevSec = pvs.time.sec;
-// const totalTime = Number(min) + Number(sec);
-// const prevTotalTime = Number(prevMin) + Number(prevSec);
-// if (totalTime <= 0 && totalTime !== prevTotalTime) {
-//   this.pauseTimer();
-//   this.onTimerToggle(id, 'isBlocked', true);
-//   this.setTime({ time: { min: '00', sec: '00' } });
-// }
-// }
-// handleTimerUpdate(pvp) {
-//   const { id, timerValue, isCompleted } = this.props;
-//   if (pvp.timerValue !== timerValue) {
-//     this.setTime({ time: timerValue });
-//     this.onTimerToggle(id, 'isRunning', false);
-//     this.onTimerToggle(id, 'isBlocked', false);
-//     clearInterval(this.timer);
-//     if (!isCompleted) {
-//       this.startTimer();
-//     }
-//   }
-// }
-// handleTodoComplete = (pvp) => {
-//   const { isCompleted } = this.props;
-//   const wasCompleted = pvp.isCompleted;
-//   if (isCompleted && !wasCompleted) {
-//     this.pauseTimer();
-//   }
-//   if (!isCompleted && wasCompleted) {
-//     this.startTimer();
-//   }
-// };
-// onTimerToggle = (itemId, fieldName, status) => {
-//   const { onTimerToggle } = this.props;
-//   const toggleTimer = (prev) => {
-//     const toggled = prev.todos.map((todo) =>
-//       // prettier-ignore
-//       todo.id === itemId
-//         ? { ...todo, [fieldName]: status }
-//         : todo
-//     );
-//     return { todos: toggled };
-//   };
-//   onTimerToggle(toggleTimer);
-// };
-// startTimer = (isSkip) => {
-//   const { id, isRunning, isBlocked, isCompleted } = this.props;
-//   if (!isSkip) {
-//     if (isRunning || isBlocked || isCompleted) {
-//       return;
-//     }
-//     this.onTimerToggle(id, 'isRunning', true);
-//   }
-//   this.timer = setInterval(() => {
-//     this.updateTimer();
-//   }, 1000);
-// };
-// updateTimer = () => {
-//   this.setTime(({ time }) => {
-//     const { min, sec } = time;
-//     return { time: formatTimer({ min, sec: sec - 1 }) };
-//   });
-// };
-// pauseTimer = () => {
-//   const { id } = this.props;
-//   clearInterval(this.timer);
-//   this.onTimerToggle(id, 'isRunning', false);
-// };
-// render() {
-//   const { time } = this.state;
-//   const { min, sec } = time;
-//   return <span className="todo-timer">{`${min}:${sec}`}</span>;
-// }
-// }
 
 Timer.displayName = 'Timer';
 

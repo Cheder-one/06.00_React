@@ -108,8 +108,11 @@ function Task({
   const handleTodoEdit = (itemId) => {
     toggleTodoEdit();
     setEditableId(itemId);
-    handleTimerToggle(id, 'isRunning', false);
   };
+
+  useEffect(() => {
+    handleTimerToggle(id, 'isRunning', !isEdit);
+  }, [isEdit]);
 
   const handleInputChange = (callback) => {
     setNewValue(callback);
@@ -207,7 +210,7 @@ function Task({
           placeholder=""
           autoFocus
           onInputChange={handleInputChange}
-          onToggleTodoEdit={toggleTodoEdit}
+          onTodoEditToggle={toggleTodoEdit}
           onTimerChange={handleTimerChange}
           onTimerToggle={handleTimerToggle}
           onTodoSubmit={handleEditedTodoSubmit}

@@ -9,59 +9,6 @@ function TaskList({
   onTodoEditSubmit,
   onTodoDelete,
 }) {
-  // const handleTodoToggle = (itemId) => {
-  //   const toggleTodo = (prevTodos) => {
-  //     const toggled = prevTodos.map((todo) =>
-  //       todo.id === itemId
-  //         ? { ...todo, isCompleted: !todo.isCompleted }
-  //         : todo
-  //     );
-
-  //     return toggled;
-  //   };
-  //   onTodoToggle(toggleTodo);
-  // };
-
-  // const handleTodoEditSubmit = (newTodo) => {
-  //   const editTodo = (prevTodos) => {
-  //     const edited = prevTodos.map((todo) =>
-  //       todo.id === newTodo.id
-  //         ? {
-  //             ...todo,
-  //             value: newTodo.value,
-  //             timerValue: newTodo.timerValue,
-  //           }
-  //         : todo
-  //     );
-
-  //     return edited;
-  //   };
-  //   onTodoEditSubmit(editTodo);
-  // };
-
-  // const handleTodoDelete = (itemId) => {
-  //   const filterTodos = (prevTodos) => {
-  //     const filtered = prevTodos.filter(({ id }) => id !== itemId);
-
-  //     return filtered;
-  //   };
-  //   onTodoDelete(filterTodos);
-  // };
-
-  // const handleTodoTimerToggle = (itemId, fieldName, status) => {
-  //   const toggleTimer = (prevTodos) => {
-  //     const toggled = prevTodos.map((todo) =>
-  //       // prettier-ignore
-  //       todo.id === itemId
-  //         ? { ...todo, [fieldName]: status }
-  //         : todo
-  //     );
-
-  //     return toggled;
-  //   };
-  //   onTimerToggle(toggleTimer);
-  // };
-
   return (
     <ul className="todo-list">
       {todos.map((todo) => (
