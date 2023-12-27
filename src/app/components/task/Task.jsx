@@ -49,8 +49,56 @@ function Task({
     setNewTimer(timerValue);
   }, [value, timerValue]);
 
-  const handleTodoComplete = (itemId) => {
-    onTodoToggle(itemId);
+  const handleTodoToggle = (itemId) => {
+    const toggleTodo = (prevTodos) => {
+      const toggled = prevTodos.map((todo) =>
+        todo.id === itemId
+          ? { ...todo, isCompleted: !todo.isCompleted }
+          : todo
+      );
+
+      return toggled;
+    };
+    onTodoToggle(toggleTodo);
+  };
+
+  const handleTimerToggle = (itemId, fieldName, status) => {
+    const toggleTimer = (prevTodos) => {
+      const toggled = prevTodos.map((todo) => {
+        return todo.id === itemId
+          ? { ...todo, [fieldName]: status }
+          : todo;
+      });
+
+      return toggled;
+    };
+    onTimerToggle(toggleTimer);
+  };
+
+  const handleTodoUpdate = (newTodo) => {
+    const editTodo = (prevTodos) => {
+      const edited = prevTodos.map((todo) =>
+        todo.id === newTodo.id
+          ? {
+              ...todo,
+              value: newTodo.value,
+              timerValue: newTodo.timerValue,
+            }
+          : todo
+      );
+
+      return edited;
+    };
+    onTodoEditSubmit(editTodo);
+  };
+
+  const handleTodoDelete = (itemId) => {
+    const filterTodos = (prevTodos) => {
+      const filtered = prevTodos.filter((todo) => todo.id !== itemId);
+
+      return filtered;
+    };
+    onTodoDelete(filterTodos);
   };
 
   const toggleTodoEdit = () => {
@@ -60,6 +108,7 @@ function Task({
   const handleTodoEdit = (itemId) => {
     toggleTodoEdit();
     setEditableId(itemId);
+    handleTimerToggle(id, 'isRunning', false);
   };
 
   const handleInputChange = (callback) => {
@@ -79,12 +128,8 @@ function Task({
       timerValue: formatTimer({ min, sec }),
     };
 
-    onTodoEditSubmit(todo);
+    handleTodoUpdate(todo);
     toggleTodoEdit();
-  };
-
-  const handleTodoDelete = (itemId) => {
-    onTodoDelete(itemId);
   };
 
   const toggleTodoTimer = ({ target }) => {
@@ -111,7 +156,7 @@ function Task({
           className="toggle"
           type="checkbox"
           checked={isCompleted}
-          onChange={() => handleTodoComplete(id)}
+          onChange={() => handleTodoToggle(id)}
         />
         <label htmlFor={`_${id}`}>
           <span className="title">{value}</span>
@@ -135,7 +180,7 @@ function Task({
               isRunning={isRunning}
               isBlocked={isBlocked}
               isCompleted={isCompleted}
-              onTimerToggle={onTimerToggle}
+              onTimerToggle={handleTimerToggle}
             />
           </span>
           <span className="description">{duration}</span>
@@ -153,14 +198,18 @@ function Task({
       </div>
       {isEdit && (
         <TaskInput
+          id={id}
           name="newValue"
           value={newValue}
+          initValue={{ todo: value, timer: timerValue }}
           timerValue={newTimer}
           className="edit"
           placeholder=""
           autoFocus
           onInputChange={handleInputChange}
+          onToggleTodoEdit={toggleTodoEdit}
           onTimerChange={handleTimerChange}
+          onTimerToggle={handleTimerToggle}
           onTodoSubmit={handleEditedTodoSubmit}
         />
       )}

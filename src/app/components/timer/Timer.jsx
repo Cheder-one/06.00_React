@@ -35,21 +35,6 @@ const Timer = forwardRef(
       timeRef.current = time;
     }, [time]);
 
-    const handleTimerToggle = (itemId, fieldName, status) => {
-      // const [fieldName, status] = Object.entries(state)[0];
-
-      const toggleTimer = (prevTodos) => {
-        const toggled = prevTodos.map((todo) => {
-          return todo.id === itemId
-            ? { ...todo, [fieldName]: status }
-            : todo;
-        });
-
-        return toggled;
-      };
-      onTimerToggle(toggleTimer);
-    };
-
     const updateTimer = () => {
       setTime((prevTime) => {
         const { min, sec } = prevTime;
@@ -60,7 +45,7 @@ const Timer = forwardRef(
     const startTimer = (hasCheck = true) => {
       if (hasCheck) {
         if (isRunning || isBlocked || isCompleted) return;
-        handleTimerToggle(id, 'isRunning', true);
+        onTimerToggle(id, 'isRunning', true);
       }
 
       timerIdRef.current = setInterval(() => {
@@ -74,8 +59,14 @@ const Timer = forwardRef(
 
     const pauseTimer = () => {
       clearTimer();
-      handleTimerToggle(id, 'isRunning', false);
+      onTimerToggle(id, 'isRunning', false);
     };
+
+    useEffect(() => {
+      if (!isRunning || isBlocked) {
+        pauseTimer();
+      }
+    }, [isRunning, isBlocked]);
 
     const handlePrevTimerTime = ({ min, sec }) => {
       if (isRunning) {
@@ -121,7 +112,7 @@ const Timer = forwardRef(
 
       if (totalTime <= 0 && !isBlocked) {
         pauseTimer();
-        handleTimerToggle(id, 'isBlocked', true);
+        onTimerToggle(id, 'isBlocked', true);
         setTime({ min: '00', sec: '00' });
       }
     }, [time]);
@@ -131,8 +122,8 @@ const Timer = forwardRef(
       if (isFirstRender) return;
 
       setTime(timerValue);
-      handleTimerToggle(id, 'isRunning', false);
-      handleTimerToggle(id, 'isBlocked', false);
+      onTimerToggle(id, 'isRunning', false);
+      onTimerToggle(id, 'isBlocked', false);
 
       clearTimer();
       if (!isCompleted) startTimer();
@@ -156,6 +147,9 @@ const Timer = forwardRef(
     return <span className="todo-timer">{`${min}:${sec}`}</span>;
   }
 );
+
+// TODO Исправить отрицательный таймер при нулевом создании времени TODO
+// TODO Исправить оставшиеся значения при отмене Edit TODO
 
 // class Timer extends Component {
 // constructor(props) {
@@ -207,7 +201,7 @@ const Timer = forwardRef(
 // const prevTotalTime = Number(prevMin) + Number(prevSec);
 // if (totalTime <= 0 && totalTime !== prevTotalTime) {
 //   this.pauseTimer();
-//   this.handleTimerToggle(id, 'isBlocked', true);
+//   this.onTimerToggle(id, 'isBlocked', true);
 //   this.setTime({ time: { min: '00', sec: '00' } });
 // }
 // }
@@ -215,8 +209,8 @@ const Timer = forwardRef(
 //   const { id, timerValue, isCompleted } = this.props;
 //   if (pvp.timerValue !== timerValue) {
 //     this.setTime({ time: timerValue });
-//     this.handleTimerToggle(id, 'isRunning', false);
-//     this.handleTimerToggle(id, 'isBlocked', false);
+//     this.onTimerToggle(id, 'isRunning', false);
+//     this.onTimerToggle(id, 'isBlocked', false);
 //     clearInterval(this.timer);
 //     if (!isCompleted) {
 //       this.startTimer();
@@ -233,7 +227,7 @@ const Timer = forwardRef(
 //     this.startTimer();
 //   }
 // };
-// handleTimerToggle = (itemId, fieldName, status) => {
+// onTimerToggle = (itemId, fieldName, status) => {
 //   const { onTimerToggle } = this.props;
 //   const toggleTimer = (prev) => {
 //     const toggled = prev.todos.map((todo) =>
@@ -252,7 +246,7 @@ const Timer = forwardRef(
 //     if (isRunning || isBlocked || isCompleted) {
 //       return;
 //     }
-//     this.handleTimerToggle(id, 'isRunning', true);
+//     this.onTimerToggle(id, 'isRunning', true);
 //   }
 //   this.timer = setInterval(() => {
 //     this.updateTimer();
@@ -267,7 +261,7 @@ const Timer = forwardRef(
 // pauseTimer = () => {
 //   const { id } = this.props;
 //   clearInterval(this.timer);
-//   this.handleTimerToggle(id, 'isRunning', false);
+//   this.onTimerToggle(id, 'isRunning', false);
 // };
 // render() {
 //   const { time } = this.state;

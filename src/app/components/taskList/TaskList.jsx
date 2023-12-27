@@ -9,58 +9,58 @@ function TaskList({
   onTodoEditSubmit,
   onTodoDelete,
 }) {
-  const handleTodoToggle = (itemId) => {
-    const toggleTodo = (prevTodos) => {
-      const toggled = prevTodos.map((todo) =>
-        todo.id === itemId
-          ? { ...todo, isCompleted: !todo.isCompleted }
-          : todo
-      );
+  // const handleTodoToggle = (itemId) => {
+  //   const toggleTodo = (prevTodos) => {
+  //     const toggled = prevTodos.map((todo) =>
+  //       todo.id === itemId
+  //         ? { ...todo, isCompleted: !todo.isCompleted }
+  //         : todo
+  //     );
 
-      return toggled;
-    };
-    onTodoToggle(toggleTodo);
-  };
+  //     return toggled;
+  //   };
+  //   onTodoToggle(toggleTodo);
+  // };
 
-  const handleTodoEditSubmit = (newTodo) => {
-    const editTodo = (prevTodos) => {
-      const edited = prevTodos.map((todo) =>
-        todo.id === newTodo.id
-          ? {
-              ...todo,
-              value: newTodo.value,
-              timerValue: newTodo.timerValue,
-            }
-          : todo
-      );
+  // const handleTodoEditSubmit = (newTodo) => {
+  //   const editTodo = (prevTodos) => {
+  //     const edited = prevTodos.map((todo) =>
+  //       todo.id === newTodo.id
+  //         ? {
+  //             ...todo,
+  //             value: newTodo.value,
+  //             timerValue: newTodo.timerValue,
+  //           }
+  //         : todo
+  //     );
 
-      return edited;
-    };
-    onTodoEditSubmit(editTodo);
-  };
+  //     return edited;
+  //   };
+  //   onTodoEditSubmit(editTodo);
+  // };
 
-  const handleTodoDelete = (itemId) => {
-    const filterTodos = (prevTodos) => {
-      const filtered = prevTodos.filter(({ id }) => id !== itemId);
+  // const handleTodoDelete = (itemId) => {
+  //   const filterTodos = (prevTodos) => {
+  //     const filtered = prevTodos.filter(({ id }) => id !== itemId);
 
-      return filtered;
-    };
-    onTodoDelete(filterTodos);
-  };
+  //     return filtered;
+  //   };
+  //   onTodoDelete(filterTodos);
+  // };
 
-  const handleTodoTimerToggle = (itemId, fieldName, status) => {
-    const toggleTimer = (prevTodos) => {
-      const toggled = prevTodos.map((todo) =>
-        // prettier-ignore
-        todo.id === itemId
-          ? { ...todo, [fieldName]: status }
-          : todo
-      );
+  // const handleTodoTimerToggle = (itemId, fieldName, status) => {
+  //   const toggleTimer = (prevTodos) => {
+  //     const toggled = prevTodos.map((todo) =>
+  //       // prettier-ignore
+  //       todo.id === itemId
+  //         ? { ...todo, [fieldName]: status }
+  //         : todo
+  //     );
 
-      return toggled;
-    };
-    onTimerToggle(toggleTimer);
-  };
+  //     return toggled;
+  //   };
+  //   onTimerToggle(toggleTimer);
+  // };
 
   return (
     <ul className="todo-list">
@@ -74,11 +74,10 @@ function TaskList({
           isRunning={todo.isRunning}
           isBlocked={todo.isBlocked}
           isCompleted={todo.isCompleted}
-          onTodoToggle={handleTodoToggle}
-          // onTimerToggle={handleTodoTimerToggle}
+          onTodoToggle={onTodoToggle}
           onTimerToggle={onTimerToggle}
-          onTodoEditSubmit={handleTodoEditSubmit}
-          onTodoDelete={handleTodoDelete}
+          onTodoEditSubmit={onTodoEditSubmit}
+          onTodoDelete={onTodoDelete}
         />
       ))}
     </ul>

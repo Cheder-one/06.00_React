@@ -6,14 +6,18 @@ import PropTypes from 'prop-types';
 import { formatTimer, generateId } from '../../utils';
 
 function TaskInput({
+  id,
   name,
   value,
+  initValue,
   timerValue,
   placeholder,
   className,
   autoFocus,
   onInputChange,
+  onToggleTodoEdit,
   onTimerChange,
+  onTimerToggle,
   onTodoSubmit,
 }) {
   const handleInputChange = ({ target }) => {
@@ -52,8 +56,25 @@ function TaskInput({
     onTodoSubmit(newTodo);
   };
 
+  const handleCancelEdit = ({ key }) => {
+    if (!initValue) return;
+    const { todo, timer } = initValue;
+
+    if (key === 'Escape') {
+      onToggleTodoEdit();
+      onInputChange(todo);
+      onTimerChange(timer);
+      onTimerToggle(id, 'isRunning', true);
+    }
+  };
+
   return (
-    <form className="new-todo-form" onSubmit={handleInputSubmit}>
+    // eslint-disable-next-line
+    <form
+      className="new-todo-form"
+      onSubmit={handleInputSubmit}
+      onKeyDown={handleCancelEdit}
+    >
       <input
         name={name}
         value={value}
