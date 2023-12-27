@@ -12,6 +12,7 @@ import {
   getLocalStorage,
   saveLocalStorage,
 } from '../../utils';
+import { useFirstRender } from '../../hooks';
 
 const Timer = forwardRef(
   (
@@ -26,10 +27,10 @@ const Timer = forwardRef(
     ref
   ) => {
     const [time, setTime] = useState(timerValue);
-    const [isFirstRender, setIsFirstRender] = useState(true);
 
     const timeRef = useRef(time);
     const timerIdRef = useRef(null);
+    const isFirstRender = useFirstRender();
 
     useEffect(() => {
       timeRef.current = time;
@@ -95,7 +96,6 @@ const Timer = forwardRef(
 
     // useMount/Unmount
     useEffect(() => {
-      setIsFirstRender(false);
       const prevTimerTime = getLocalStorage(`timerValue_${id}`);
 
       if (prevTimerTime) {
@@ -153,9 +153,6 @@ const Timer = forwardRef(
     return <span className="todo-timer">{`${min}:${sec}`}</span>;
   }
 );
-
-// TODO Исправить отрицательный таймер при нулевом создании времени TODO
-// TODO Исправить оставшиеся значения при отмене Edit TODO
 
 Timer.displayName = 'Timer';
 

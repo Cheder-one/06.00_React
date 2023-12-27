@@ -1,9 +1,10 @@
 import PropTypes from 'prop-types';
-import { createRef, useEffect, useState } from 'react';
+import { createRef, useEffect, useRef, useState } from 'react';
 
 import Timer from '../timer/Timer';
 import TaskInput from '../taskInput/TaskInput';
 import { formatTimer, getDuration } from '../../utils';
+import { useFirstRender } from '../../hooks';
 
 function Task({
   id,
@@ -25,6 +26,7 @@ function Task({
   const [duration, setDuration] = useState(getDuration(created));
 
   const timerRef = createRef();
+  const isFirstRender = useFirstRender();
 
   function startDurationInterval() {
     const durationInterval = setInterval(() => {
@@ -111,6 +113,7 @@ function Task({
   };
 
   useEffect(() => {
+    if (isFirstRender) return;
     handleTimerToggle(id, 'isRunning', !isEdit);
   }, [isEdit]);
 
