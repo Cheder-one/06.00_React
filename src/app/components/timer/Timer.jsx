@@ -26,16 +26,24 @@ const Timer = forwardRef(
     ref
   ) => {
     const [time, setTime] = useState(timerValue);
-    const timerRef = useRef();
+    const [isFirstRender, setIsFirstRender] = useState(true);
+
+    const timeRef = useRef(time);
+    const timerIdRef = useRef(null);
+
+    useEffect(() => {
+      timeRef.current = time;
+    }, [time]);
 
     const handleTimerToggle = (itemId, fieldName, status) => {
+      // const [fieldName, status] = Object.entries(state)[0];
+
       const toggleTimer = (prevTodos) => {
-        const toggled = prevTodos.map((todo) =>
-          // prettier-ignore
-          todo.id === itemId
-          ? { ...todo, [fieldName]: status }
-          : todo
-        );
+        const toggled = prevTodos.map((todo) => {
+          return todo.id === itemId
+            ? { ...todo, [fieldName]: status }
+            : todo;
+        });
 
         return toggled;
       };
@@ -55,21 +63,13 @@ const Timer = forwardRef(
         handleTimerToggle(id, 'isRunning', true);
       }
 
-      const timer = setInterval(() => {
+      timerIdRef.current = setInterval(() => {
         updateTimer();
       }, 1000);
-
-      // eslint-disable-next-line
-      return () => clearInterval(timer);
     };
 
-    useEffect(() => {
-      timerRef.current = startTimer(false);
-      return timerRef.current;
-    }, []);
-
     const clearTimer = () => {
-      timerRef.current();
+      clearInterval(timerIdRef.current);
     };
 
     const pauseTimer = () => {
@@ -92,12 +92,15 @@ const Timer = forwardRef(
 
     const handleUnmount = () => {
       clearTimer();
-      saveLocalStorage(`timerValue_${id}`, time);
+      saveLocalStorage(`timerValue_${id}`, timeRef.current);
       saveLocalStorage(`timestamp_${id}`, Date.now());
     };
 
+    // useMount/Unmount
     useEffect(() => {
+      setIsFirstRender(false);
       const prevTimerTime = getLocalStorage(`timerValue_${id}`);
+
       if (prevTimerTime) {
         handlePrevTimerTime(prevTimerTime);
       }
@@ -116,7 +119,7 @@ const Timer = forwardRef(
       const { min, sec } = time;
       const totalTime = Number(min) + Number(sec);
 
-      if (totalTime <= 0) {
+      if (totalTime <= 0 && !isBlocked) {
         pauseTimer();
         handleTimerToggle(id, 'isBlocked', true);
         setTime({ min: '00', sec: '00' });
@@ -125,6 +128,8 @@ const Timer = forwardRef(
 
     // useTimerUpdate
     useEffect(() => {
+      if (isFirstRender) return;
+
       setTime(timerValue);
       handleTimerToggle(id, 'isRunning', false);
       handleTimerToggle(id, 'isBlocked', false);

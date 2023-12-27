@@ -75,7 +75,8 @@ function TaskList({
           isBlocked={todo.isBlocked}
           isCompleted={todo.isCompleted}
           onTodoToggle={handleTodoToggle}
-          onTimerToggle={handleTodoTimerToggle}
+          // onTimerToggle={handleTodoTimerToggle}
+          onTimerToggle={onTimerToggle}
           onTodoEditSubmit={handleTodoEditSubmit}
           onTodoDelete={handleTodoDelete}
         />
